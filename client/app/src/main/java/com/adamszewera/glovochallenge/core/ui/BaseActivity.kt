@@ -16,7 +16,7 @@ class BaseActivity : AppCompatActivity() {
     }
 
 
-    open fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
             .commit()
