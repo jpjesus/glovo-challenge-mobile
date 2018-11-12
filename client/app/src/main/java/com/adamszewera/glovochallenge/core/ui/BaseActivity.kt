@@ -1,0 +1,25 @@
+package com.adamszewera.glovochallenge.core.ui
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.adamszewera.glovochallenge.R
+//import kotlinx.android.synthetic.main.toolbar.toolbar
+
+class BaseActivity : AppCompatActivity() {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_layout)
+//        setSupportActionBar(toolbar)
+    }
+
+
+    open fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .commit()
+    }
+
+}
