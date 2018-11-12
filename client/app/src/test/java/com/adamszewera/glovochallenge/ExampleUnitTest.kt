@@ -1,4 +1,4 @@
-package challenge.adamszewera.com.glovochallenge
+package com.adamszewera.glovochallenge
 
 import org.junit.Test
 

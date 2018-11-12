@@ -1,4 +1,4 @@
-package challenge.adamszewera.com.glovochallenge
+package com.adamszewera.glovochallenge
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("challenge.adamszewera.com.glovochallenge", appContext.packageName)
+        assertEquals("com.adamszewera.glovochallenge", appContext.packageName)
     }
 }
