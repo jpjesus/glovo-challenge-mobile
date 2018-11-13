@@ -1,15 +1,17 @@
 package com.adamszewera.glovochallenge.ui.home
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.adamszewera.glovochallenge.R
+import com.adamszewera.glovochallenge.core.ui.BaseActivity
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null) {
+            replaceFragment(HomeFragment.newInstance())
+        }
     }
 
 

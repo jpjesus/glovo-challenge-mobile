@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.adamszewera.glovochallenge.R
 //import kotlinx.android.synthetic.main.toolbar.toolbar
 
-class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

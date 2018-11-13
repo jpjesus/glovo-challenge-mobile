@@ -8,9 +8,15 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
+    id("androidx.navigation.safeargs")
 }
 
 android {
+    compileOptions {
+        setSourceCompatibility(JavaVersion.VERSION_1_8)
+        setTargetCompatibility(JavaVersion.VERSION_1_8)
+    }
+
     compileSdkVersion(Config.Android.compileSdk)
     defaultConfig {
         applicationId = "com.adamszewera.glovochallenge"
@@ -28,6 +34,42 @@ android {
     }
 
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("keystore/debug.keystore")
+            storePassword = "androiddebug"
+            keyAlias = "androiddebugkey"
+            keyPassword = "androiddebug"
+        }
+//        create("release") {
+//
+//        }
+    }
+
+
+    flavorDimensions("env")
+    productFlavors {
+        create("mock") {
+            dimension = "env"
+        }
+        create("devel") {
+            dimension = "env"
+
+        }
+        create("prod") {
+            dimension = "env"
+
+        }
+
+        productFlavors.all {
+            resValue("string", "google_maps_key", "AIzaSyB2Myem6udzVW50mUFRPtorikMtRj2sjNQ")
+        }
+    }
+
+    dataBinding {
+        setEnabled(true)
+    }
+
 
 }
 
@@ -41,6 +83,10 @@ dependencies {
     implementation(Config.Libraries.androidxAppcompat)
     implementation(Config.Libraries.androidxConstraintLayout)
     implementation(Config.Libraries.androidxMaterial)
+    implementation(Config.Libraries.lifecycleExtensions)
+    implementation(Config.Libraries.lifecycleCommonJava8)
+    implementation(Config.Libraries.androidxLegacy)
+
 
 
     implementation(Config.Libraries.dagger)
@@ -50,6 +96,9 @@ dependencies {
 
     implementation(Config.Libraries.rxJava)
     implementation(Config.Libraries.rxAndroid)
+    implementation(Config.Libraries.googleMaps) {
+        exclude(group = "com.android.support")
+    }
 
     // networking
     implementation(Config.Libraries.gson)
@@ -61,6 +110,7 @@ dependencies {
     // const val okhttpMockWebserver = "com.squareup.okhttp3:mockwebserver:${Versions.okHttp3}"
 
 
+    // testing
 //    androidTestImplementation(Config.TestLibraries.androidxCore)
 //    androidTestImplementation(Config.TestLibraries.junit)
 //    androidTestImplementation(Config.TestLibraries.runner)

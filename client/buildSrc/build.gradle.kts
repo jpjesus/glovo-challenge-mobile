@@ -5,6 +5,6 @@ plugins {
 }
 
 repositories {
-    google()
     jcenter()
+    google()
 }

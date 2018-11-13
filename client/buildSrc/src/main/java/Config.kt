@@ -20,12 +20,13 @@ object Config {
 
         const val rxJava = "2.2.3"
         const val rxAndroid = "2.1.0"
-
-
+        const val googleMaps = "16.0.0"
         const val timber = "4.7.1"
 
         const val androidx = "1.0.0"
         const val androidxConstraintLayout = "1.1.3"
+        const val lifecycleVersion = "2.0.0"
+
 
         // networking
         const val gson = "2.8.5"
@@ -49,8 +50,18 @@ object Config {
         const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger2}"
 
         const val androidxAppcompat = "androidx.appcompat:appcompat:${Versions.androidx}"
-        const val androidxMaterial = "com.google.android.material:material:${Versions.androidx}"
         const val androidxConstraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.androidxConstraintLayout}"
+        const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycleVersion}"
+        const val lifecycleCommonJava8 = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycleVersion}"
+        const val androidxMaterial = "com.google.android.material:material:${Versions.androidx}"
+        const val androidxLegacy = "androidx.legacy:legacy-support-v4:1.0.0"
+
+        const val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}"
+        const val lifecycleCommon = "androidx.lifecycle:lifecycle-common:${Versions.lifecycleVersion}"
+        const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime:${Versions.lifecycleVersion}"
+        const val lifecycleExtensions2 = "androidx.lifecycle:extensions:${Versions.lifecycleVersion}"
+
+
 
         const val gson = "com.google.code.gson:gson:${Versions.gson}"
         const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okHttp3}"
@@ -59,6 +70,9 @@ object Config {
         const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit2}"
         const val retrofitRxJava = "com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit2}"
         const val retrofitConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofit2}"
+
+        const val googleMaps = "com.google.android.gms:play-services-maps:${Versions.googleMaps}"
+
     }
 
 
