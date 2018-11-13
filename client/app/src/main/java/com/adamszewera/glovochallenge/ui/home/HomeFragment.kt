@@ -3,11 +3,9 @@ package com.adamszewera.glovochallenge.ui.home
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,13 +14,16 @@ import com.adamszewera.glovochallenge.R
 import com.adamszewera.glovochallenge.core.ui.BaseFragment
 import com.adamszewera.glovochallenge.data.models.City
 import com.adamszewera.glovochallenge.databinding.FragmentHomeBinding
+import com.adamszewera.glovochallenge.util.ConvexHull
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolygonOptions
+import com.google.maps.android.PolyUtil
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 const val REQUEST_CODE_LOCATION = 1992
@@ -73,8 +74,10 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
             override fun onChanged(cities: List<City>?) {
                 cities?.forEach {
                     val city = it
+
+                    val simplifiedPolygon = ConvexHull.makeHull(city.working_area)
                     map.addPolygon(PolygonOptions().apply {
-                        addAll(city.working_area)
+                        addAll(simplifiedPolygon)
                         fillColor(fillColor)
                     })
 
@@ -86,6 +89,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         mapView = binding.root.findViewById<MapView>(R.id.map)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+
 
 
         return binding.root
@@ -169,7 +173,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
 
 
     // todo: remove
-    val SYDNEY = LatLng(-33.862, 151.21)
+    val BARCELONA = LatLng(41.383333, 2.183333)
     val ZOOM_LEVEL = 13f
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,15 +186,15 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
 
         Timber.d("on map ready: after")
         with(map) {
-            moveCamera(CameraUpdateFactory.newLatLngZoom(SYDNEY, ZOOM_LEVEL))
-            addMarker(MarkerOptions().position(SYDNEY))
+            moveCamera(CameraUpdateFactory.newLatLngZoom(BARCELONA, ZOOM_LEVEL))
+            addMarker(MarkerOptions().position(BARCELONA))
         }
         with(map.uiSettings) {
             isMyLocationButtonEnabled = true
             isZoomControlsEnabled = true
             isZoomGesturesEnabled = true
         }
-        map.moveCamera(CameraUpdateFactory.newLatLng(SYDNEY))
+        map.moveCamera(CameraUpdateFactory.newLatLng(BARCELONA))
 
         homeViewModel.loadCities()
     }
