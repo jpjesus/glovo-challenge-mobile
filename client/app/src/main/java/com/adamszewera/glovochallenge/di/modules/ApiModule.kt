@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -42,9 +43,15 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
+        val cacheSize = (5 * 1024 * 1024).toLong()
+        val cache = Cache(context.cacheDir, cacheSize)
         val loggingInterceptor = HttpLoggingInterceptor()
         val builder = OkHttpClient.Builder()
+            .cache(cache)
+
+        // todo: add cache interceptor
+
         if (BuildConfig.DEBUG) {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         } else {
