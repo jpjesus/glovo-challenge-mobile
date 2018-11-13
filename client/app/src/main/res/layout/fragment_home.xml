@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
 >
 
     <data>
@@ -10,28 +11,195 @@
         />
     </data>
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+    >
         <com.google.android.gms.maps.MapView
-                android:id="@+id/map"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:background="#fa4718"
+            android:elevation="1dp"
+        />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+    >
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="#fa4718"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/spacing_normal"
         >
 
 
+            <TextView
+                    android:id="@+id/lbl_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_code"
+                    style="@style/LabelTextView"
+                    android:layout_marginTop="@dimen/spacing_normal"
+            />
+            <TextView
+                    android:id="@+id/lbl_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_name"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_code_tv"
+            />
+            <TextView
+                    android:id="@+id/lbl_country_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_country_code"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_name_tv"
+            />
+            <TextView
+                    android:id="@+id/lbl_currency_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_currency"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_country_code_tv"
+            />
+            <TextView
+                    android:id="@+id/lbl_enabled_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_enabled"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_currency_tv"
+            />
+            <TextView
+                    android:id="@+id/lbl_busy_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_busy"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_enabled_tv"
+            />
+            <TextView
+                    android:id="@+id/lbl_time_zone_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_time_zone"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_busy_tv"
+            />
+            <TextView
+                    android:id="@+id/lbl_language_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_language_code"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_time_zone_tv"
+            />
+            <TextView
+                    android:id="@+id/lbl_working_area_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_working_area"
+                    style="@style/LabelTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_language_code_tv"
+            />
 
-        </com.google.android.gms.maps.MapView>
+            <!-- text values -->
+            <TextView
+                    android:id="@+id/info_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_code_tv"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_code_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_name_tv"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_name_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_country_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_country_code_tv"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_country_code_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_currency_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_currency_tv"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_currency_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_enabled_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_enabled_tv"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_enabled_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_busy_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_busy_tv"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_busy_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_time_zone_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_time_zone_tv"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_time_zone_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_language_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_language_code_tv"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_language_code_tv"
+                    tools:text="some text"
+            />
+            <TextView
+                    android:id="@+id/info_working_area_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InfoTextView"
+                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_working_area_tv"
+                    app:layout_constraintLeft_toRightOf="@id/lbl_working_area_tv"
+                    tools:text="some text"
+            />
 
 
 
 
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
+    </ScrollView>
+</LinearLayout>
 </layout>
+
+
+

@@ -7,4 +7,22 @@
 
     <string name="lbl_share_location">Share Location</string>
     <string name="lbl_not_now">Not Now</string>
+
+
+
+
+    <string name="lbl_code">Code:</string>
+    <string name="lbl_name">Name:</string>
+    <string name="lbl_country_code">Country code:</string>
+    <string name="lbl_currency">Currency:</string>
+    <string name="lbl_enabled">Enabled:</string>
+    <string name="lbl_busy">Busy:</string>
+    <string name="lbl_time_zone">Time zone:</string>
+    <string name="lbl_language_code">Language code:</string>
+    <string name="lbl_working_area">Working area:</string>
+
+    <string name="lbl_search">search city</string>
+
+
+
 </resources>

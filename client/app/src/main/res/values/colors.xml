@@ -4,5 +4,12 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="polygonFillColor">#88ffcd1b</color>
+    <color name="colorTextPrimary">#212121</color>
+    <color name="colorTextSecondary">#757575</color>
+
+    <color name="black">#000</color>
+    <color name="white">#000</color>
+    <color name="light_gray">#888</color>
+
+    <color name="polygon_fill_color">#88ffcd1b</color>
 </resources>

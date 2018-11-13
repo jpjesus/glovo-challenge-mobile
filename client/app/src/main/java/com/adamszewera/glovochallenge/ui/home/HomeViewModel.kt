@@ -16,8 +16,9 @@ class HomeViewModel constructor(
 
 
     val cities = MutableLiveData<List<City>>()
-
     val currentCity = MutableLiveData<City>()
+    val firstAccess = MutableLiveData<Boolean>()
+
 
 
 
@@ -27,11 +28,11 @@ class HomeViewModel constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
+                    firstAccess.setValue(it)
                     if (it) {   // first time
                         // todo: set first time to false
                     }
 
-                    // todo: ask for permission
                 },
                 {
                     // todo: show error
@@ -41,9 +42,6 @@ class HomeViewModel constructor(
     }
 
 
-    fun setCurrentCity() {
-
-    }
 
 
     fun loadCities() {

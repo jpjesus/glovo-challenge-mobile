@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,16 +20,23 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolygonOptions
-import com.google.maps.android.PolyUtil
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
-import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 const val REQUEST_CODE_LOCATION = 1992
 
-class HomeFragment : BaseFragment(), OnMapReadyCallback {
+//    android:id="@+id/info_code_tv"
+//    android:id="@+id/info_name_tv"
+//    android:id="@+id/info_country_code_tv"
+//    android:id="@+id/info_currency_tv"
+//    android:id="@+id/info_enabled_tv"
+//    android:id="@+id/info_busy_tv"
+//    android:id="@+id/info_time_zone_tv"
+//    android:id="@+id/info_language_code_tv"
+//    android:id="@+id/info_working_area_tv"
+
+class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -52,6 +60,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         getFragmentComponent().inject(this)
         mContext = activity as Context
+        setHasOptionsMenu(true)
     }
 
     override fun layoutId(): Int = R.layout.fragment_home
@@ -69,12 +78,11 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         }
 
 
-        val fillColor = mContext.resources.getColor(R.color.polygonFillColor)
+        val fillColor = ContextCompat.getColor(mContext, R.color.polygon_fill_color)
         homeViewModel.cities.observe(this, object: Observer<List<City>> {
             override fun onChanged(cities: List<City>?) {
                 cities?.forEach {
                     val city = it
-
                     val simplifiedPolygon = ConvexHull.makeHull(city.working_area)
                     map.addPolygon(PolygonOptions().apply {
                         addAll(simplifiedPolygon)
@@ -85,6 +93,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
             }
         }
         )
+
+        homeViewModel.firstAccess.observe(this, Observer<Boolean> { showCustomDialog() })
 
         mapView = binding.root.findViewById<MapView>(R.id.map)
         mapView.onCreate(savedInstanceState)
@@ -97,11 +107,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // todo: show on first open
-//        homeViewModel.loadCities()
-
-
+        homeViewModel.loadData()
     }
 
 
@@ -115,6 +121,32 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         mapView.onPause()
     }
 
+
+
+
+
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                  Helper Methods
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+//        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.search_menu, menu)
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                  Helper Methods
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     private fun showCustomDialog() {
         val dialog = Dialog(this.activity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -142,6 +174,13 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         dialog.window.attributes = lp
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                  Permissions
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    override fun onCameraMove() {
+        // use debounce with rxjava to limit the number of events
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,28 +212,25 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
 
 
     // todo: remove
-    val BARCELONA = LatLng(41.383333, 2.183333)
-    val ZOOM_LEVEL = 13f
+//    val BARCELONA = LatLng(41.383333, 2.183333)
+//    val ZOOM_LEVEL = 13f
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  OnMapReadyCallback
     ////////////////////////////////////////////////////////////////////////////////////////////////
     override fun onMapReady(googleMap: GoogleMap?) {
-        Timber.d("on map ready: before")
         map = googleMap ?: return
 
-
-        Timber.d("on map ready: after")
         with(map) {
-            moveCamera(CameraUpdateFactory.newLatLngZoom(BARCELONA, ZOOM_LEVEL))
-            addMarker(MarkerOptions().position(BARCELONA))
+//            moveCamera(CameraUpdateFactory.newLatLngZoom(BARCELONA, ZOOM_LEVEL))
+//            addMarker(MarkerOptions().position(BARCELONA))
         }
         with(map.uiSettings) {
             isMyLocationButtonEnabled = true
             isZoomControlsEnabled = true
             isZoomGesturesEnabled = true
         }
-        map.moveCamera(CameraUpdateFactory.newLatLng(BARCELONA))
+//        map.moveCamera(CameraUpdateFactory.newLatLng(BARCELONA))
 
         homeViewModel.loadCities()
     }
