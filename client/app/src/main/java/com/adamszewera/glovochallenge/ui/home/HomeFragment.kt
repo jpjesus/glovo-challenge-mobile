@@ -1,6 +1,8 @@
 package com.adamszewera.glovochallenge.ui.home
 
+import android.Manifest
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -13,6 +15,8 @@ import com.adamszewera.glovochallenge.core.ui.BaseFragment
 import com.adamszewera.glovochallenge.databinding.FragmentHomeBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import pub.devrel.easypermissions.EasyPermissions
+import pub.devrel.easypermissions.PermissionRequest
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,7 +27,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-//    private lateinit var map: GoogleMap
+    private lateinit var mContext : Context
 
     private lateinit var homeViewModel: HomeViewModel
 
@@ -37,6 +41,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getFragmentComponent().inject(this)
+        mContext = activity as Context
     }
 
     override fun layoutId(): Int = R.layout.fragment_home
@@ -89,14 +94,11 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
 
 
         yesBtn.setOnClickListener {
-            Toast.makeText(this.context, "You clicked me.", Toast.LENGTH_SHORT).show()
-            homeViewModel.some()
+            enableLocation()
             dialog.dismiss()
         }
 
         noBtn.setOnClickListener {
-            Toast.makeText(this.context, "You clicked no.", Toast.LENGTH_SHORT).show()
-//            Timber.d("pressed no")
             dialog.dismiss()
         }
 
@@ -109,9 +111,31 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  Permissions
     ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private fun hasLocationPermission(): Boolean {
+        return EasyPermissions.hasPermissions(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
+
+
+    private fun enableLocation() {
+        if (hasLocationPermission()) {
+//            map.is
+        } else {
+            val permissionRequest = PermissionRequest.Builder(
+                this,
+                REQUEST_CODE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ).build()
+            EasyPermissions.requestPermissions(permissionRequest)
+        }
+    }
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  OnMapReadyCallback

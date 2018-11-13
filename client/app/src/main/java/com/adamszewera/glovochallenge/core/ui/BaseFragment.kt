@@ -1,5 +1,7 @@
 package com.adamszewera.glovochallenge.core.ui
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.adamszewera.glovochallenge.App
@@ -20,4 +22,6 @@ abstract class BaseFragment : Fragment() {
             .appComponent(App.getInstance().getAppComponent())
             .build()
     }
+
+
 }
