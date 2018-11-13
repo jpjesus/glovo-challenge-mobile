@@ -18,9 +18,13 @@ import com.adamszewera.glovochallenge.databinding.FragmentHomeBinding
 import com.adamszewera.glovochallenge.util.ConvexHull
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Predicate
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 const val REQUEST_CODE_LOCATION = 1992
@@ -36,7 +40,7 @@ const val REQUEST_CODE_LOCATION = 1992
 //    android:id="@+id/info_working_area_tv"
 
 class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveListener,
-    GoogleMap.OnMarkerClickListener {
+    GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -48,6 +52,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
     private lateinit var map: GoogleMap
 
     private lateinit var mapView: MapView
+
+    private var mapNeedsUpdating : Boolean = false
 
     companion object {
 
@@ -78,21 +84,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
         }
 
 
-        homeViewModel.cities.observe(this, object: Observer<List<City>> {
-            override fun onChanged(cities: List<City>?) {
-                showAllCities(cities)
-                // for each city create a marker (clickable) and zoom out on all the markers
-//                cities?.forEach {
-//                    val city = it
-//                    val simplifiedPolygon = ConvexHull.makeHull(city.working_area)
-//                    map.addPolygon(PolygonOptions().apply {
-//                        addAll(simplifiedPolygon)
-//                        fillColor(fillColor)
-//                    })
-//                }
-            }
-        }
-        )
+        homeViewModel.cities.observe(this, Observer<List<City>> { cities -> showAllCities(cities, true) } )
 
         homeViewModel.currentCity.observe(this, Observer<City> { showCurrentCity(it) })
 
@@ -180,7 +172,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
     }
 
 
-    private fun showAllCities(cities: List<City>?) {
+    private fun showAllCities(cities: List<City>?, updateCamera: Boolean) {
         map.clear()
         with(map) {
             var boundsBuilder = LatLngBounds.Builder()
@@ -195,7 +187,9 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
                 )
             }
 
-            moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 50))
+            if (updateCamera) {
+                moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 50))
+            }
         }
 
     }
@@ -228,14 +222,38 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
         })
     }
 
+    private fun showWorkingAreas(cities: List<City>?) {
+        val disposable =
+        Observable.just(cities)
+            .debounce(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .flatMapIterable { it }
+            .filter { city -> map.projection.visibleRegion.latLngBounds.contains(city.working_area[0])}
+            .toList()
+            .subscribe(
+                { it.forEach { city -> showCityWorkingArea(city.working_area) } },
+                { Timber.e(it) }
+            )
+    }
+
+
+
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                       google maps camera movement
     ////////////////////////////////////////////////////////////////////////////////////////////////
     override fun onCameraMove() {
-        // use debounce with rxjava to limit the number of events
-        Timber.d("camera move")
+    }
+
+    override fun onCameraIdle() {
+        Timber.d("camera move: %s", map.cameraPosition.zoom)
+        val zoom = map.cameraPosition.zoom
+        if (zoom < 5) {
+            showAllCities(homeViewModel.cities.value, false)
+        } else if (zoom > 8){
+            showWorkingAreas(homeViewModel.cities.value)
+        }
     }
 
 
@@ -287,6 +305,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
         map = googleMap ?: return
 
         map.setOnMarkerClickListener(this)
+        map.setOnCameraIdleListener(this)
         with(map.uiSettings) {
             isMyLocationButtonEnabled = true
             isZoomControlsEnabled = true
