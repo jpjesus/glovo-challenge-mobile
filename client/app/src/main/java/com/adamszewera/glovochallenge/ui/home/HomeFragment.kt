@@ -13,8 +13,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.adamszewera.glovochallenge.R
 import com.adamszewera.glovochallenge.core.ui.BaseFragment
 import com.adamszewera.glovochallenge.databinding.FragmentHomeBinding
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import timber.log.Timber
@@ -30,6 +34,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var mContext : Context
 
     private lateinit var homeViewModel: HomeViewModel
+
+    private lateinit var map: GoogleMap
 
     companion object {
 
@@ -57,6 +63,10 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         ).apply {
             viewModel = homeViewModel
         }
+
+        val mapView = binding.root.findViewById<MapView>(R.id.map)
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
 
 
         return binding.root
@@ -86,12 +96,6 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
 
         var yesBtn = dialog.findViewById<Button>(R.id.yes_btn)
         var noBtn = dialog.findViewById<Button>(R.id.no_btn)
-
-        yesBtn.setOnClickListener {
-
-
-        }
-
 
         yesBtn.setOnClickListener {
             enableLocation()
@@ -136,12 +140,27 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     }
 
 
+    val SYDNEY = LatLng(-33.862, 151.21)
+    val ZOOM_LEVEL = 13f
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  OnMapReadyCallback
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    override fun onMapReady(p0: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap?) {
+        map = googleMap ?: return
 
+
+        with(map) {
+            moveCamera(CameraUpdateFactory.newLatLngZoom(SYDNEY, ZOOM_LEVEL))
+            addMarker(MarkerOptions().position(SYDNEY))
+        }
     }
+
+
+
+
+
+
+
 
 }

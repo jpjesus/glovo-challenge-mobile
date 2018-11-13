@@ -62,7 +62,7 @@ android {
         }
 
         productFlavors.all {
-            resValue("string", "google_maps_key", "AIzaSyB2Myem6udzVW50mUFRPtorikMtRj2sjNQ")
+            resValue("string", "google_maps_key", "AIzaSyAzfC99c7qvnTTcCjRpcBoIoWBUT80L29w")
         }
     }
 
