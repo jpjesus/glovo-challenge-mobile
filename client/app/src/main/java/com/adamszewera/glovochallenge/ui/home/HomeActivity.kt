@@ -5,7 +5,6 @@ import com.adamszewera.glovochallenge.core.ui.BaseActivity
 
 class HomeActivity : BaseActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -13,9 +12,5 @@ class HomeActivity : BaseActivity() {
             replaceFragment(HomeFragment.newInstance())
         }
     }
-
-
-
-
 
 }

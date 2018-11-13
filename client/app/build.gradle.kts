@@ -86,6 +86,7 @@ dependencies {
     implementation(Config.Libraries.lifecycleExtensions)
     implementation(Config.Libraries.lifecycleCommonJava8)
     implementation(Config.Libraries.androidxLegacy)
+    implementation(Config.Libraries.easyPermissions)
 
 
 

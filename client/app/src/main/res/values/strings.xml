@@ -2,4 +2,9 @@
     <string name="app_name">GlovoChallenge</string>
 
     <string name="api_endpoint">http://192.168.1.80:3000/api/</string>
+
+    <string name="msg_dialog_position">Help us display your current position by granting location permissions.</string>
+
+    <string name="lbl_share_location">Share Location</string>
+    <string name="lbl_not_now">Not Now</string>
 </resources>

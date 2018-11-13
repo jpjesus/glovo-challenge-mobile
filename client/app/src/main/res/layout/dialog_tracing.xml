@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/map_img"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:src="@drawable/ic_dialog_gps"
+        android:paddingTop="80dp"
+        android:padding="@dimen/spacing_normal"
+        />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/msg_dialog_position"
+        android:layout_below="@id/map_img"
+        android:padding="@dimen/spacing_normal"
+        android:textSize="18sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:padding="@dimen/spacing_normal"
+        android:layout_below="@id/text"
+        >
+
+        <Button
+            android:id="@+id/no_btn"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:text="@string/lbl_not_now"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/spacing_micro"
+            android:layout_marginBottom="@dimen/spacing_small"
+            />
+
+        <Button
+            android:id="@+id/yes_btn"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:text="@string/lbl_share_location"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/spacing_micro"
+            android:layout_marginBottom="@dimen/spacing_small"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

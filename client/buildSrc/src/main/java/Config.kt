@@ -27,6 +27,8 @@ object Config {
         const val androidxConstraintLayout = "1.1.3"
         const val lifecycleVersion = "2.0.0"
 
+        const val easyPermissions = "2.0.0"
+
 
         // networking
         const val gson = "2.8.5"
@@ -61,6 +63,7 @@ object Config {
         const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime:${Versions.lifecycleVersion}"
         const val lifecycleExtensions2 = "androidx.lifecycle:extensions:${Versions.lifecycleVersion}"
 
+        const val easyPermissions = "pub.devrel:easypermissions:${Versions.easyPermissions}"
 
 
         const val gson = "com.google.code.gson:gson:${Versions.gson}"
