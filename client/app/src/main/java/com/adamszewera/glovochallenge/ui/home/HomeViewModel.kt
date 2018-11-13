@@ -19,6 +19,16 @@ class HomeViewModel constructor(
     val currentCity = MutableLiveData<City>()
     val firstAccess = MutableLiveData<Boolean>()
 
+    // city values
+//    android:id="@+id/info_code_tv"
+//    android:id="@+id/info_name_tv"
+//    android:id="@+id/info_country_code_tv"
+//    android:id="@+id/info_currency_tv"
+//    android:id="@+id/info_enabled_tv"
+//    android:id="@+id/info_busy_tv"
+//    android:id="@+id/info_time_zone_tv"
+//    android:id="@+id/info_language_code_tv"
+//    android:id="@+id/info_working_area_tv"
 
 
 
@@ -36,6 +46,22 @@ class HomeViewModel constructor(
                 },
                 {
                     // todo: show error
+                }
+            )
+        disposeOnClear.add(disposable)
+    }
+
+
+    fun loadCurrentCity(cityCode: String) {
+        val disposable = glovoRepository.getCity(cityCode)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    currentCity.setValue(it)
+                },
+                {
+                    Timber.e(it)
                 }
             )
         disposeOnClear.add(disposable)

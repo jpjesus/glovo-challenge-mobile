@@ -17,11 +17,10 @@ import com.adamszewera.glovochallenge.data.models.City
 import com.adamszewera.glovochallenge.databinding.FragmentHomeBinding
 import com.adamszewera.glovochallenge.util.ConvexHull
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.gms.maps.model.*
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
+import timber.log.Timber
 import javax.inject.Inject
 
 const val REQUEST_CODE_LOCATION = 1992
@@ -36,7 +35,8 @@ const val REQUEST_CODE_LOCATION = 1992
 //    android:id="@+id/info_language_code_tv"
 //    android:id="@+id/info_working_area_tv"
 
-class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveListener {
+class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveListener,
+    GoogleMap.OnMarkerClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -78,21 +78,23 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
         }
 
 
-        val fillColor = ContextCompat.getColor(mContext, R.color.polygon_fill_color)
         homeViewModel.cities.observe(this, object: Observer<List<City>> {
             override fun onChanged(cities: List<City>?) {
-                cities?.forEach {
-                    val city = it
-                    val simplifiedPolygon = ConvexHull.makeHull(city.working_area)
-                    map.addPolygon(PolygonOptions().apply {
-                        addAll(simplifiedPolygon)
-                        fillColor(fillColor)
-                    })
-
-                }
+                showAllCities(cities)
+                // for each city create a marker (clickable) and zoom out on all the markers
+//                cities?.forEach {
+//                    val city = it
+//                    val simplifiedPolygon = ConvexHull.makeHull(city.working_area)
+//                    map.addPolygon(PolygonOptions().apply {
+//                        addAll(simplifiedPolygon)
+//                        fillColor(fillColor)
+//                    })
+//                }
             }
         }
         )
+
+        homeViewModel.currentCity.observe(this, Observer<City> { showCurrentCity(it) })
 
         homeViewModel.firstAccess.observe(this, Observer<Boolean> { showCustomDialog() })
 
@@ -131,16 +133,18 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
 
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                  Helper Methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
 //        super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.search_menu, menu)
     }
+
+
+
+
+
+
+
+
 
 
 
@@ -168,6 +172,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
 
         noBtn.setOnClickListener {
             dialog.dismiss()
+            homeViewModel.loadCities()
         }
 
         dialog.show()
@@ -175,11 +180,62 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
     }
 
 
+    private fun showAllCities(cities: List<City>?) {
+        map.clear()
+        with(map) {
+            var boundsBuilder = LatLngBounds.Builder()
+            cities?.forEach {
+                // the first point of the polygon is a "good" approximation when seeing the whole world
+                boundsBuilder.include(it.working_area[0])
+                addMarker(
+                    MarkerOptions()
+                        .position(it.working_area[0])
+                        .snippet(it.code)
+                        .title(it.name)
+                )
+            }
+
+            moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 50))
+        }
+
+    }
+
+
+    private fun showCurrentCity(city: City) {
+        // todo: camera animation
+        var boundsBuilder = LatLngBounds.Builder()
+        city.working_area.forEach {
+            boundsBuilder.include(it)
+        }
+        map.moveCamera(
+            CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 50)
+        )
+
+        // clear other pins for efficiency
+        map.clear()
+
+        showCityWorkingArea(city.working_area)
+
+    }
+
+
+    private fun showCityWorkingArea(workingArea: List<LatLng>) {
+        val fillColor = ContextCompat.getColor(mContext, R.color.polygon_fill_color)
+        val simplifiedPolygon = ConvexHull.makeHull(workingArea)
+        map.addPolygon(PolygonOptions().apply {
+            addAll(simplifiedPolygon)
+            fillColor(fillColor)
+        })
+    }
+
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                  Permissions
+    //                       google maps camera movement
     ////////////////////////////////////////////////////////////////////////////////////////////////
     override fun onCameraMove() {
         // use debounce with rxjava to limit the number of events
+        Timber.d("camera move")
     }
 
 
@@ -211,9 +267,18 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
     }
 
 
-    // todo: remove
-//    val BARCELONA = LatLng(41.383333, 2.183333)
-//    val ZOOM_LEVEL = 13f
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                  OnMarkerClickListener
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        // move camera to the city and center the camera on all the points + padding that contain the whole ara of the city
+        val cityCode = marker?.snippet
+        if (cityCode != null) {
+            homeViewModel.loadCurrentCity(cityCode)
+        }
+        return true
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  OnMapReadyCallback
@@ -221,18 +286,12 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
     override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap ?: return
 
-        with(map) {
-//            moveCamera(CameraUpdateFactory.newLatLngZoom(BARCELONA, ZOOM_LEVEL))
-//            addMarker(MarkerOptions().position(BARCELONA))
-        }
+        map.setOnMarkerClickListener(this)
         with(map.uiSettings) {
             isMyLocationButtonEnabled = true
             isZoomControlsEnabled = true
             isZoomGesturesEnabled = true
         }
-//        map.moveCamera(CameraUpdateFactory.newLatLng(BARCELONA))
-
-        homeViewModel.loadCities()
     }
 
 
