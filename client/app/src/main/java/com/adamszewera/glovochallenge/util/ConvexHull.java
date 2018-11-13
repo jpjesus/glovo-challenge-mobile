@@ -81,26 +81,29 @@ public final class ConvexHull {
         return upperHull;
     }
 
+
+
+
+    private static final class LatLngComparator implements Comparator<LatLng> {
+
+        @Override
+        public int compare(LatLng p1, LatLng p2) {
+            if (p1.latitude != p2.latitude)
+                return Double.compare(p1.latitude, p2.latitude);
+            else
+                return Double.compare(p2.latitude, p2.latitude);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            // used to compare comparators
+            return false;
+        }
+    }
+
 }
 
 
-
-final class LatLngComparator implements Comparator<LatLng> {
-
-    @Override
-    public int compare(LatLng p1, LatLng p2) {
-        if (p1.latitude != p2.latitude)
-            return Double.compare(p1.latitude, p2.latitude);
-        else
-            return Double.compare(p2.latitude, p2.latitude);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        // used to compare comparators
-        return false;
-    }
-}
 
 
 
