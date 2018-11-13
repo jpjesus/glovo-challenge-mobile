@@ -3,6 +3,8 @@ package com.adamszewera.glovochallenge.di.modules
 import android.content.Context
 import com.adamszewera.glovochallenge.BuildConfig
 import com.adamszewera.glovochallenge.R
+import com.adamszewera.glovochallenge.data.adapter.CityDeserializer
+import com.adamszewera.glovochallenge.data.models.City
 import com.adamszewera.glovochallenge.data.source.remote.GlovoApi
 import com.adamszewera.glovochallenge.di.qualifiers.ApplicationContext
 import com.google.gson.GsonBuilder
@@ -24,6 +26,7 @@ class ApiModule {
     @Provides
     fun provideGlovoApi(@ApplicationContext context: Context, httpClient: OkHttpClient): GlovoApi {
         val gson = GsonBuilder()
+            .registerTypeAdapter(City::class.java, CityDeserializer())
             .create()
 
         var retrofit = Retrofit.Builder()
@@ -32,7 +35,6 @@ class ApiModule {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
-
 
         return retrofit.create(GlovoApi::class.java)
     }

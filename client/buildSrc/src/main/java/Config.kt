@@ -21,6 +21,7 @@ object Config {
         const val rxJava = "2.2.3"
         const val rxAndroid = "2.1.0"
         const val googleMaps = "16.0.0"
+        const val googleMapsUtils = "0.5"
         const val timber = "4.7.1"
 
         const val androidx = "1.0.0"
@@ -75,6 +76,7 @@ object Config {
         const val retrofitConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofit2}"
 
         const val googleMaps = "com.google.android.gms:play-services-maps:${Versions.googleMaps}"
+        const val googleMapsUtils = "com.google.maps.android:android-maps-utils:${Versions.googleMapsUtils}"
 
     }
 

@@ -8,15 +8,14 @@ import android.view.*
 import android.widget.Button
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.adamszewera.glovochallenge.R
 import com.adamszewera.glovochallenge.core.ui.BaseFragment
+import com.adamszewera.glovochallenge.data.models.City
 import com.adamszewera.glovochallenge.databinding.FragmentHomeBinding
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import pub.devrel.easypermissions.EasyPermissions
@@ -36,6 +35,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var homeViewModel: HomeViewModel
 
     private lateinit var map: GoogleMap
+
+    private lateinit var mapView: MapView
 
     companion object {
 
@@ -63,8 +64,16 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         ).apply {
             viewModel = homeViewModel
         }
+        homeViewModel.cities.observe(this, object: Observer<List<City>> {
+            override fun onChanged(cities: List<City>?) {
+                cities?.forEach {
+                    Timber.d("city: %s", it)
+                }
+            }
+        }
+        )
 
-        val mapView = binding.root.findViewById<MapView>(R.id.map)
+        mapView = binding.root.findViewById<MapView>(R.id.map)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
 
@@ -75,13 +84,22 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showCustomDialog()
+        // todo: show on first open
+        homeViewModel.loadCities()
+
 
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
 
-
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
 
     private fun showCustomDialog() {
         val dialog = Dialog(this.activity)
@@ -140,6 +158,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     }
 
 
+    // todo: remove
     val SYDNEY = LatLng(-33.862, 151.21)
     val ZOOM_LEVEL = 13f
 
@@ -147,13 +166,21 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     //                                  OnMapReadyCallback
     ////////////////////////////////////////////////////////////////////////////////////////////////
     override fun onMapReady(googleMap: GoogleMap?) {
+        Timber.d("on map ready: before")
         map = googleMap ?: return
 
 
+        Timber.d("on map ready: after")
         with(map) {
             moveCamera(CameraUpdateFactory.newLatLngZoom(SYDNEY, ZOOM_LEVEL))
             addMarker(MarkerOptions().position(SYDNEY))
         }
+        with(map.uiSettings) {
+            isMyLocationButtonEnabled = true
+            isZoomControlsEnabled = true
+            isZoomGesturesEnabled = true
+        }
+        map.moveCamera(CameraUpdateFactory.newLatLng(SYDNEY))
     }
 
 

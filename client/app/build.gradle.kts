@@ -97,6 +97,7 @@ dependencies {
 
     implementation(Config.Libraries.rxJava)
     implementation(Config.Libraries.rxAndroid)
+    implementation(Config.Libraries.googleMapsUtils)
     implementation(Config.Libraries.googleMaps) {
         exclude(group = "com.android.support")
     }
