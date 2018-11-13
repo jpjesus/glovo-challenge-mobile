@@ -17,21 +17,7 @@ class HomeViewModel constructor(
 
     val cities = MutableLiveData<List<City>>()
 
-
-
-
-    fun some() {
-        val disposable = appRepository.isFirstAccess()
-            .subscribe(
-                {
-                    Timber.d("is first access: %s", it)
-                },
-                {
-
-                }
-            )
-        disposeOnClear.add(disposable)
-    }
+    val currentCity = MutableLiveData<City>()
 
 
 
@@ -55,13 +41,17 @@ class HomeViewModel constructor(
     }
 
 
+    fun setCurrentCity() {
+
+    }
+
+
     fun loadCities() {
         val disposable = glovoRepository.getCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    Timber.d("cities: %s", it)
                     cities.setValue(it)
                 },
                 {

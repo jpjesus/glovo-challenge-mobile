@@ -3,6 +3,7 @@ package com.adamszewera.glovochallenge.ui.home
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -18,6 +19,7 @@ import com.adamszewera.glovochallenge.databinding.FragmentHomeBinding
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolygonOptions
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import timber.log.Timber
@@ -64,10 +66,18 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         ).apply {
             viewModel = homeViewModel
         }
+
+
+        val fillColor = mContext.resources.getColor(R.color.polygonFillColor)
         homeViewModel.cities.observe(this, object: Observer<List<City>> {
             override fun onChanged(cities: List<City>?) {
                 cities?.forEach {
-                    Timber.d("city: %s", it)
+                    val city = it
+                    map.addPolygon(PolygonOptions().apply {
+                        addAll(city.working_area)
+                        fillColor(fillColor)
+                    })
+
                 }
             }
         }
@@ -85,7 +95,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         // todo: show on first open
-        homeViewModel.loadCities()
+//        homeViewModel.loadCities()
 
 
     }
@@ -181,6 +191,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
             isZoomGesturesEnabled = true
         }
         map.moveCamera(CameraUpdateFactory.newLatLng(SYDNEY))
+
+        homeViewModel.loadCities()
     }
 
 
