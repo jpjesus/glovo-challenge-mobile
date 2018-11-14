@@ -42,7 +42,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     private lateinit var mapView: MapView
 
-    private var mapNeedsUpdating : Boolean = false
+    private var drawnCities = mutableListOf<String>()
 
     companion object {
 
@@ -206,14 +206,13 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     private fun showCityWorkingArea(workingArea: List<LatLng>) {
         val fillColor = ContextCompat.getColor(mContext, R.color.polygon_fill_color)
         val simplifiedPolygon = ConvexHull.makeHull(workingArea)
-        map.addPolygon(PolygonOptions().apply {
+        val polygon = map.addPolygon(PolygonOptions().apply {
             addAll(simplifiedPolygon)
             fillColor(fillColor)
         })
     }
 
     private fun showWorkingAreas(cities: List<City>?) {
-//        map.clear()
         val disposable =
         Observable.just(cities)
             .debounce(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -221,7 +220,14 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             .filter { city -> map.projection.visibleRegion.latLngBounds.contains(city.working_area[0])}
             .toList()
             .subscribe(
-                { it.forEach { city -> showCityWorkingArea(city.working_area) } },
+                { it.forEach { city ->
+                    if (drawnCities.contains(city.code)) {
+                        // city already drawn
+                    } else {
+                        showCityWorkingArea(city.working_area)
+                        drawnCities.add(city.code)
+                    }
+                } },
                 { Timber.e(it) }
             )
     }
@@ -238,6 +244,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         val zoom = map.cameraPosition.zoom
         if (zoom < 5) {
             showAllCities(homeViewModel.cities.value, false)
+            drawnCities.clear()
         } else if (zoom > 8){
             showWorkingAreas(homeViewModel.cities.value)
         }
