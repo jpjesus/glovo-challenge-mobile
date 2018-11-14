@@ -8,3 +8,9 @@
   The modified version that uses LatLng objects assumes that in an area of a city the difference 
   between the given points can is small and that we can think of working with points in a 2D plane,
   since this algorithm was not made to work with 3D data.
+  
+* The working area of a city shown on the map is the approximation of the real polygon. This polygon in the code
+  is computed each time for all the set of points that make the original polygon. This of course is not the 
+  most efficient solution possible, but it's implemented this way so it's easy to see the difference between the two.
+  
+* 

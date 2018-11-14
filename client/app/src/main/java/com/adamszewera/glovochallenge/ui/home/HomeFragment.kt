@@ -3,6 +3,7 @@ package com.adamszewera.glovochallenge.ui.home
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
+import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -20,7 +21,6 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Predicate
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import timber.log.Timber
@@ -42,7 +42,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     private lateinit var mapView: MapView
 
-    private var drawnCities  = mutableMapOf<String, Polygon>()
+    private var drawnCities  = mutableMapOf<String, LatLngBounds>()
 
     companion object {
 
@@ -198,20 +198,23 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         // clear other pins for efficiency
         map.clear()
         drawnCities.clear()
-        val p = showCityWorkingArea(city.working_area)
-        drawnCities.put(city.code, p)
+        val b = showCityWorkingArea(city.working_area)
+        drawnCities.put(city.code, b)
 
     }
 
 
-    private fun showCityWorkingArea(workingArea: List<LatLng>) : Polygon {
+    private fun showCityWorkingArea(workingArea: List<LatLng>) : LatLngBounds {
         val fillColor = ContextCompat.getColor(mContext, R.color.polygon_fill_color)
         val simplifiedPolygon = ConvexHull.makeHull(workingArea)
-        val polygon = map.addPolygon(PolygonOptions().apply {
+        map.addPolygon(PolygonOptions().apply {
             addAll(simplifiedPolygon)
             fillColor(fillColor)
         })
-        return polygon
+
+        val bounds = LatLngBounds.Builder()
+        simplifiedPolygon.forEach { bounds.include(it) }
+        return bounds.build()
     }
 
     private fun showWorkingAreas(cities: List<City>?) {
@@ -226,13 +229,15 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     if (drawnCities.contains(city.code)) {
                         // city already drawn
                     } else {
-                        val p = showCityWorkingArea(city.working_area)
-                        drawnCities.put(city.code, p)
+                        val b = showCityWorkingArea(city.working_area)
+                        drawnCities.put(city.code, b)
                     }
                 } },
                 { Timber.e(it) }
             )
     }
+
+
 
 
 
@@ -251,9 +256,17 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             showWorkingAreas(homeViewModel.cities.value)
         }
 
-        // todo: show the info for the city at the center of the camera
+        val center = map.projection.visibleRegion.latLngBounds.center
+        drawnCities.forEach {
+            (cityCode, bounds) -> {
+            if (bounds.contains(center)) {
+                // todo: show city data
+            } else {
+                // todo: clear data
+            }
 
-        //
+        }
+        }
     }
 
 
