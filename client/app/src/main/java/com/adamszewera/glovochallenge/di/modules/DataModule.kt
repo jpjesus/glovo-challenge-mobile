@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.adamszewera.glovochallenge.data.AppRepository
+import com.adamszewera.glovochallenge.data.TrackingRepository
 import com.adamszewera.glovochallenge.data.source.local.PreferencesDataSource
 import com.adamszewera.glovochallenge.data.source.remote.GlovoApi
 import com.adamszewera.glovochallenge.data.source.remote.GlovoDataSource
@@ -34,6 +35,12 @@ class DataModule {
     @Singleton
     fun provideAppRepository(preferencesDataSource: PreferencesDataSource): AppRepository {
         return AppRepository(preferencesDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTrackingRepository(@ApplicationContext context: Context) : TrackingRepository {
+        return TrackingRepository(context)
     }
 
 }

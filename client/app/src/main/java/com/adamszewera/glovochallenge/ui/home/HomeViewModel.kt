@@ -1,10 +1,12 @@
 package com.adamszewera.glovochallenge.ui.home
 
+import android.location.Location
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.adamszewera.glovochallenge.core.viewmodel.BaseViewModel
 import com.adamszewera.glovochallenge.data.AppRepository
 import com.adamszewera.glovochallenge.data.GlovoRepository
+import com.adamszewera.glovochallenge.data.TrackingRepository
 import com.adamszewera.glovochallenge.data.models.City
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -12,13 +14,15 @@ import timber.log.Timber
 
 class HomeViewModel constructor(
     private val appRepository: AppRepository,
-    private val glovoRepository: GlovoRepository
+    private val glovoRepository: GlovoRepository,
+    private val trackingRepository: TrackingRepository
 ): BaseViewModel() {
 
 
     val cities = MutableLiveData<List<City>>()
     val currentCity = MutableLiveData<City>()
     val firstAccess = MutableLiveData<Boolean>()
+    val currentLocation  = MutableLiveData<Location>()
 
     // city values
     val infoCode = ObservableField<String>()
@@ -102,6 +106,23 @@ class HomeViewModel constructor(
 
     }
 
+
+    /**
+     * Starts receiving locations.
+     * Note: permissions must be granted first
+     */
+    fun startLocations() {
+        trackingRepository.initTracking()
+        val disposable = trackingRepository.getLocations().subscribe(
+            {
+                currentLocation.value = it
+            },
+            {
+                Timber.e(it)
+            }
+        )
+        disposeOnClear.add(disposable)
+    }
 
 
 }

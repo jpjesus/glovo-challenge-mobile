@@ -6,6 +6,7 @@ import com.adamszewera.glovochallenge.App
 import com.adamszewera.glovochallenge.core.ui.BaseFragment
 import com.adamszewera.glovochallenge.data.AppRepository
 import com.adamszewera.glovochallenge.data.GlovoRepository
+import com.adamszewera.glovochallenge.data.TrackingRepository
 import com.adamszewera.glovochallenge.di.modules.ViewModelModule
 import com.adamszewera.glovochallenge.di.modules.ApiModule
 import com.adamszewera.glovochallenge.di.modules.AppModule
@@ -38,6 +39,8 @@ interface AppComponent {
     fun glovoRepository(): GlovoRepository
 
     fun appRepository(): AppRepository
+
+    fun trackingRepository(): TrackingRepository
 
 
     fun inject(fragment: BaseFragment)

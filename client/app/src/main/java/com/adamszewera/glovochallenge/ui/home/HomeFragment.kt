@@ -35,17 +35,13 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var mContext : Context
-
     private lateinit var homeViewModel: HomeViewModel
-
     private lateinit var map: GoogleMap
-
     private lateinit var mapView: MapView
-
     private var drawnCities  = mutableMapOf<String, LatLngBounds>()
+    private var isFirstLocation = true
 
     companion object {
-
         fun newInstance(): HomeFragment {
             return HomeFragment()
         }
@@ -79,6 +75,27 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         homeViewModel.currentCity.observe(this, Observer<City> { showCurrentCity(it) })
 
         homeViewModel.firstAccess.observe(this, Observer<Boolean> { showCustomDialog() })
+
+        homeViewModel.currentLocation.observe(this, Observer<Location> { location ->
+            if (isFirstLocation) {
+                val position = LatLng(location.latitude, location.longitude)
+                with(map) {
+                    moveCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                            CameraPosition.Builder().target(position).zoom(10f).build()
+                        )
+                    )
+                    addMarker(
+                        MarkerOptions()
+                        .position(position)
+                        .title("You")
+                    )
+                }
+
+
+            }
+            isFirstLocation = false
+        })
 
         mapView = binding.root.findViewById<MapView>(R.id.map)
         mapView.onCreate(savedInstanceState)
@@ -253,7 +270,9 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
             showAllCities(homeViewModel.cities.value, false)
             drawnCities.clear()
         } else if (zoom > 8){
-            showWorkingAreas(homeViewModel.cities.value)
+            if (homeViewModel.cities.value != null) {
+                showWorkingAreas(homeViewModel.cities.value)
+            }
         }
 
         val center = map.projection.visibleRegion.latLngBounds.center
@@ -286,7 +305,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     private fun enableLocation() {
         if (hasLocationPermission()) {
-
+            homeViewModel.startLocations()
         } else {
             val permissionRequest = PermissionRequest.Builder(
                 this,
@@ -329,6 +348,9 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                  Location
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
