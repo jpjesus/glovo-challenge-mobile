@@ -98,14 +98,6 @@
                     style="@style/LabelTextView"
                     app:layout_constraintTop_toBottomOf="@+id/lbl_time_zone_tv"
             />
-            <TextView
-                    android:id="@+id/lbl_working_area_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lbl_working_area"
-                    style="@style/LabelTextView"
-                    app:layout_constraintTop_toBottomOf="@+id/lbl_language_code_tv"
-            />
 
             <!-- text values -->
             <TextView
@@ -116,6 +108,7 @@
                     app:layout_constraintLeft_toRightOf="@id/lbl_code_tv"
                     app:layout_constraintBaseline_toBaselineOf="@id/lbl_code_tv"
                     tools:text="some text"
+                    android:text="@{viewModel.infoCode}"
             />
             <TextView
                     android:id="@+id/info_name_tv"
@@ -125,6 +118,7 @@
                     app:layout_constraintLeft_toRightOf="@id/lbl_name_tv"
                     app:layout_constraintBaseline_toBaselineOf="@id/lbl_name_tv"
                     tools:text="some text"
+                    android:text="@{viewModel.infoName}"
             />
             <TextView
                     android:id="@+id/info_country_code_tv"
@@ -134,6 +128,7 @@
                     app:layout_constraintLeft_toRightOf="@id/lbl_country_code_tv"
                     app:layout_constraintBaseline_toBaselineOf="@id/lbl_country_code_tv"
                     tools:text="some text"
+                    android:text="@{viewModel.infoCountry}"
             />
             <TextView
                     android:id="@+id/info_currency_tv"
@@ -143,6 +138,7 @@
                     app:layout_constraintBaseline_toBaselineOf="@id/lbl_currency_tv"
                     app:layout_constraintLeft_toRightOf="@id/lbl_currency_tv"
                     tools:text="some text"
+                    android:text="@{viewModel.infoCurrency}"
             />
             <TextView
                     android:id="@+id/info_enabled_tv"
@@ -170,6 +166,7 @@
                     app:layout_constraintBaseline_toBaselineOf="@id/lbl_time_zone_tv"
                     app:layout_constraintLeft_toRightOf="@id/lbl_time_zone_tv"
                     tools:text="some text"
+                    android:text="@{viewModel.infoTimeZone}"
             />
             <TextView
                     android:id="@+id/info_language_code_tv"
@@ -179,17 +176,8 @@
                     app:layout_constraintBaseline_toBaselineOf="@id/lbl_language_code_tv"
                     app:layout_constraintLeft_toRightOf="@id/lbl_language_code_tv"
                     tools:text="some text"
+                    android:text="@{viewModel.infoLanguage}"
             />
-            <TextView
-                    android:id="@+id/info_working_area_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/InfoTextView"
-                    app:layout_constraintBaseline_toBaselineOf="@id/lbl_working_area_tv"
-                    app:layout_constraintLeft_toRightOf="@id/lbl_working_area_tv"
-                    tools:text="some text"
-            />
-
 
 
 

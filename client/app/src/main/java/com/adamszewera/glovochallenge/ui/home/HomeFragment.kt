@@ -29,18 +29,7 @@ import javax.inject.Inject
 
 const val REQUEST_CODE_LOCATION = 1992
 
-//    android:id="@+id/info_code_tv"
-//    android:id="@+id/info_name_tv"
-//    android:id="@+id/info_country_code_tv"
-//    android:id="@+id/info_currency_tv"
-//    android:id="@+id/info_enabled_tv"
-//    android:id="@+id/info_busy_tv"
-//    android:id="@+id/info_time_zone_tv"
-//    android:id="@+id/info_language_code_tv"
-//    android:id="@+id/info_working_area_tv"
-
-class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveListener,
-    GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener {
+class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -82,6 +71,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
         ).apply {
             viewModel = homeViewModel
         }
+        binding.setLifecycleOwner(this)
 
 
         homeViewModel.cities.observe(this, Observer<List<City>> { cities -> showAllCities(cities, true) } )
@@ -223,6 +213,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
     }
 
     private fun showWorkingAreas(cities: List<City>?) {
+//        map.clear()
         val disposable =
         Observable.just(cities)
             .debounce(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -243,11 +234,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveL
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                       google maps camera movement
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    override fun onCameraMove() {
-    }
-
     override fun onCameraIdle() {
-        Timber.d("camera move: %s", map.cameraPosition.zoom)
         val zoom = map.cameraPosition.zoom
         if (zoom < 5) {
             showAllCities(homeViewModel.cities.value, false)

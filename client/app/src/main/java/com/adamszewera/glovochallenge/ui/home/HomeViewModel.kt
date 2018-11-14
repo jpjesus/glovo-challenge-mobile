@@ -1,5 +1,6 @@
 package com.adamszewera.glovochallenge.ui.home
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.adamszewera.glovochallenge.core.viewmodel.BaseViewModel
 import com.adamszewera.glovochallenge.data.AppRepository
@@ -20,15 +21,14 @@ class HomeViewModel constructor(
     val firstAccess = MutableLiveData<Boolean>()
 
     // city values
-//    android:id="@+id/info_code_tv"
-//    android:id="@+id/info_name_tv"
-//    android:id="@+id/info_country_code_tv"
-//    android:id="@+id/info_currency_tv"
-//    android:id="@+id/info_enabled_tv"
-//    android:id="@+id/info_busy_tv"
-//    android:id="@+id/info_time_zone_tv"
-//    android:id="@+id/info_language_code_tv"
-//    android:id="@+id/info_working_area_tv"
+    val infoCode = ObservableField<String>()
+    val infoName = ObservableField<String>()
+    val infoCountry = ObservableField<String>()
+    val infoCurrency = ObservableField<String>()
+//    val infoEnabled = ObservableField<Boolean>()
+//    val infoBusy = ObservableField<Boolean>()
+    val infoTimeZone = ObservableField<String>()
+    val infoLanguage = ObservableField<String>()
 
 
 
@@ -57,8 +57,20 @@ class HomeViewModel constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {
-                    currentCity.setValue(it)
+                { city ->
+                    currentCity.value = city
+
+
+                    Timber.d("current city: %s", city)
+
+                    infoCode.set(city.code)
+                    infoName.set(city.name)
+                    infoCountry.set(city.country_code)
+                    infoCurrency.set(city.currency)
+//                    infoEnabled.set(city.enabled)
+//                    infoBusy.set(city.busy)
+                    infoTimeZone.set(city.time_zone)
+                    infoLanguage.set(city.language_code)
                 },
                 {
                     Timber.e(it)
