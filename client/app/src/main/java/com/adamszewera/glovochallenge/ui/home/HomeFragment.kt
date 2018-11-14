@@ -41,11 +41,13 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     private var drawnCities  = mutableMapOf<String, LatLngBounds>()
     private var isFirstLocation = true
 
+
     companion object {
         fun newInstance(): HomeFragment {
             return HomeFragment()
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,13 +56,12 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         setHasOptionsMenu(true)
     }
 
+
     override fun layoutId(): Int = R.layout.fragment_home
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
-
 
         val binding = DataBindingUtil.inflate<FragmentHomeBinding>(
             inflater, R.layout.fragment_home, container, false
@@ -74,7 +75,15 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
         homeViewModel.currentCity.observe(this, Observer<City> { showCurrentCity(it) })
 
-        homeViewModel.firstAccess.observe(this, Observer<Boolean> { showCustomDialog() })
+        homeViewModel.firstAccess.observe(this, Observer<Boolean> { firstAccess ->
+            if (firstAccess) {
+                showCustomDialog()
+            } else if (hasLocationPermission()) {
+                homeViewModel.startLocations()
+            } else {
+                homeViewModel.loadCities()
+            }
+        })
 
         homeViewModel.currentLocation.observe(this, Observer<Location> { location ->
             if (isFirstLocation) {
@@ -91,8 +100,6 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                         .title("You")
                     )
                 }
-
-
             }
             isFirstLocation = false
         })
@@ -101,10 +108,9 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
 
-
-
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -117,33 +123,16 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mapView.onResume()
     }
 
+
     override fun onPause() {
         super.onPause()
         mapView.onPause()
     }
 
 
-
-
-
-
-
-
-
-
-
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-//        super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.search_menu, menu)
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -170,8 +159,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
 
         noBtn.setOnClickListener {
-            dialog.dismiss()
             homeViewModel.loadCities()
+            dialog.dismiss()
         }
 
         dialog.show()
@@ -193,12 +182,10 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                         .title(it.name)
                 )
             }
-
             if (updateCamera) {
                 moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 50))
             }
         }
-
     }
 
 
@@ -217,7 +204,6 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         drawnCities.clear()
         val b = showCityWorkingArea(city.working_area)
         drawnCities.put(city.code, b)
-
     }
 
 
@@ -233,6 +219,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         simplifiedPolygon.forEach { bounds.include(it) }
         return bounds.build()
     }
+
 
     private fun showWorkingAreas(cities: List<City>?) {
         val disposable =
@@ -276,6 +263,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
 
         val center = map.projection.visibleRegion.latLngBounds.center
+
+        // todo: show the info of the city the user is currently looking at
         drawnCities.forEach {
             (cityCode, bounds) -> {
             if (bounds.contains(center)) {
@@ -292,10 +281,10 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  Permissions
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
     private fun hasLocationPermission(): Boolean {
         return EasyPermissions.hasPermissions(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -330,6 +319,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         return true
     }
 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  OnMapReadyCallback
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -348,9 +338,6 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                  Location
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

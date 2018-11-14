@@ -40,16 +40,16 @@ class HomeViewModel constructor(
         val disposable = appRepository.isFirstAccess()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .flatMap { isFirstTime ->
+                firstAccess.setValue(isFirstTime)
+                return@flatMap appRepository.setFirstAccess(false)
+            }
             .subscribe(
                 {
-                    firstAccess.setValue(it)
-                    if (it) {   // first time
-                        // todo: set first time to false
-                    }
-
+                    //
                 },
                 {
-                    // todo: show error
+                    Timber.d(it)
                 }
             )
         disposeOnClear.add(disposable)
