@@ -42,7 +42,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     private lateinit var mapView: MapView
 
-    private var drawnCities = mutableListOf<String>()
+    private var drawnCities  = mutableMapOf<String, Polygon>()
 
     companion object {
 
@@ -197,19 +197,21 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
         // clear other pins for efficiency
         map.clear()
-
-        showCityWorkingArea(city.working_area)
+        drawnCities.clear()
+        val p = showCityWorkingArea(city.working_area)
+        drawnCities.put(city.code, p)
 
     }
 
 
-    private fun showCityWorkingArea(workingArea: List<LatLng>) {
+    private fun showCityWorkingArea(workingArea: List<LatLng>) : Polygon {
         val fillColor = ContextCompat.getColor(mContext, R.color.polygon_fill_color)
         val simplifiedPolygon = ConvexHull.makeHull(workingArea)
         val polygon = map.addPolygon(PolygonOptions().apply {
             addAll(simplifiedPolygon)
             fillColor(fillColor)
         })
+        return polygon
     }
 
     private fun showWorkingAreas(cities: List<City>?) {
@@ -224,8 +226,8 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
                     if (drawnCities.contains(city.code)) {
                         // city already drawn
                     } else {
-                        showCityWorkingArea(city.working_area)
-                        drawnCities.add(city.code)
+                        val p = showCityWorkingArea(city.working_area)
+                        drawnCities.put(city.code, p)
                     }
                 } },
                 { Timber.e(it) }
@@ -248,6 +250,10 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         } else if (zoom > 8){
             showWorkingAreas(homeViewModel.cities.value)
         }
+
+        // todo: show the info for the city at the center of the camera
+
+        //
     }
 
 
@@ -267,7 +273,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     private fun enableLocation() {
         if (hasLocationPermission()) {
-//            map.is
+
         } else {
             val permissionRequest = PermissionRequest.Builder(
                 this,
