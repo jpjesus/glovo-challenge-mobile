@@ -1,29 +1,30 @@
 ### macOS ###
+.DS_Store
+*/.DS_Store
 *.DS_Store
-.AppleDouble
-.LSOverride
+*Breakpoints_v2.xcbkptlist
+*/Breakpoints_v2.xcbkptlist
+GlovoCodeChallenge/.DS_Store
+# User specific files
+*/UserInterfaceState.xcuserstate
 
-# Icon must end with two \r
-Icon
+#Pods
+Pods/
+*/Pods/
+*/Podfile.lock
+Podfile.lock
 
-# Thumbnails
-._*
+## Other
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+*.orig
 
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
+## Obj-C/Swift specific
+*.hmap
+*.ipa
 
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-# Data
-data
+## Aditional 
+*/xcschememanagement.plist
+xcuserdata/
