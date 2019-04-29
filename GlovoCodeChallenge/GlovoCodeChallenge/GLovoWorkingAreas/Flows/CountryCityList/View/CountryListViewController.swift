@@ -41,7 +41,7 @@ class CountryListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.navigationItem.title = "Available cities"
+        navigationController?.navigationItem.hidesBackButton = false
     }
 }
 
@@ -68,6 +68,12 @@ extension CountryListViewController {
         countryTableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
+        
+        countryTableView.rx
+            .modelSelected(City.self)
+            .subscribe(onNext: { [unowned self] city in
+                self.viewModel.goToMapView(with: city)
+            }).disposed(by: disposeBag)
         
     }
     

@@ -32,6 +32,8 @@ struct City: Decodable {
         case workingArea = "working_area"
     }
     
+    init() {}
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decode(String.self, forKey: .name)

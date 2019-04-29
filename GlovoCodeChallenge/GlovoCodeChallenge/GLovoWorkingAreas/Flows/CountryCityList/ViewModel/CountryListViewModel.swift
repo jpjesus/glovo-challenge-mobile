@@ -16,7 +16,7 @@ class CountryListViewModel {
     private var disposeBag = DisposeBag()
     private let provider: MoyaProvider<GlovoProvider> = MoyaProvider<GlovoProvider>()
     var countries: Driver<[Country]>?
-    weak var coordinator: CountryListCoordinator?
+    private weak var coordinator: CountryListCoordinator?
     
     init(_ coordinator: CountryListCoordinator) {
         countries = setCountryWithCities().asDriver(onErrorJustReturn: [])
@@ -62,5 +62,8 @@ class CountryListViewModel {
         }
         return results
     }
-
+    
+    func goToMapView(with city: City) {
+        coordinator?.gotoMapView(with: city)
+    }
 }

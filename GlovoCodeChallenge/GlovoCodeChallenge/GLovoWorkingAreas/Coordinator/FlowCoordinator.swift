@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class FlowCoordinator:Coordinator {
+class FlowCoordinator: Coordinator {
     
     private let window: UIWindow?
     private let parent = UINavigationController()
@@ -22,8 +22,6 @@ class FlowCoordinator:Coordinator {
         window?.makeKeyAndVisible()
     }
     
-    
-    
     func start() {
         if CLLocationManager.authorizationStatus() != .denied {
             showCountryListView()
@@ -32,12 +30,15 @@ class FlowCoordinator:Coordinator {
         }
     }
     
-    func finish() {}
-    
     private func showCountryListView() {
         let coordinator = CountryListCoordinator(parent, mainCoordinator: self)
         addCoordinatorChild(coordinator)
         coordinator.start()
     }
-    
+
+    func showMapView(with city: City? = nil, from: Coordinator) {
+
+        let coordinator = CityMapCoordinator(parent, mainCoordinator: self, city: city)
+        
+    }
 }

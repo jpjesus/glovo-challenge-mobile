@@ -9,7 +9,7 @@ target 'GlovoCodeChallenge' do
   pod 'RxDataSources'
   pod 'RxSwift',  '~> 4.4.2'
   pod 'RxCocoa',  '~> 4.4.2'
-  pod 'Moya/RxSwift'
+  pod 'Moya/RxSwift', '~> 12.0.1'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'SnapKit', '~> 4.0.0'

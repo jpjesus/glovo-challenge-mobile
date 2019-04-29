@@ -12,10 +12,10 @@ class CountryListCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
     
-    private weak var mainCoordinator: Coordinator?
+    private weak var mainCoordinator: FlowCoordinator?
     private weak var navigation: UINavigationController?
     
-    init(_ navigation: UINavigationController?, mainCoordinator: Coordinator) {
+    init(_ navigation: UINavigationController?, mainCoordinator: FlowCoordinator) {
         self.navigation = navigation
         self.mainCoordinator = mainCoordinator
     }
@@ -25,6 +25,8 @@ class CountryListCoordinator: Coordinator {
         let vc = CountryListViewController(viewModel)
         navigation?.pushViewController(vc, animated: true)
     }
-    
-    func finish() {}
+
+    func gotoMapView(with city: City) {
+        mainCoordinator?.showMapView(with: city, from: self)
+    }
 }

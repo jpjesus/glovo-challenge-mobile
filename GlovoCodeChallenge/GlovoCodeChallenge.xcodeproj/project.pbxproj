@@ -23,6 +23,11 @@
 		EA91A6D7226A95AB00F9793C /* CountryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA91A6D6226A95AB00F9793C /* CountryListViewModel.swift */; };
 		EA91A6DB226AABA700F9793C /* CountrySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA91A6DA226AABA700F9793C /* CountrySection.swift */; };
 		EABB52BEF4BBE481737D01F9 /* Pods_GlovoCodeChallengeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E195E854B5A41AA90424BDF9 /* Pods_GlovoCodeChallengeTests.framework */; };
+		EAD057DF227548B40053C936 /* CityMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD057DE227548B40053C936 /* CityMapViewController.swift */; };
+		EAD057E1227548C60053C936 /* CityMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAD057E0227548C60053C936 /* CityMapViewController.xib */; };
+		EAD057E722754FCF0053C936 /* CityMapSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD057E622754FCF0053C936 /* CityMapSection.swift */; };
+		EAD057EA2275543C0053C936 /* CityInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD057E92275543C0053C936 /* CityInfoCell.swift */; };
+		EAD057ED227554710053C936 /* CityInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAD057EC227554710053C936 /* CityInfoCell.xib */; };
 		EAE2E307226B6BE800A2BA68 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE2E306226B6BE800A2BA68 /* Coordinator.swift */; };
 		EAE2E309226B704800A2BA68 /* FlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE2E308226B704800A2BA68 /* FlowCoordinator.swift */; };
 		EAE2E30F226B771500A2BA68 /* CountryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAE2E30E226B771500A2BA68 /* CountryListViewController.xib */; };
@@ -30,6 +35,8 @@
 		EAE2E314226D2D4300A2BA68 /* CountryListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAE2E313226D2D4300A2BA68 /* CountryListCell.xib */; };
 		EAE2E316226D2D6100A2BA68 /* CountryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE2E315226D2D6100A2BA68 /* CountryListCell.swift */; };
 		EAE2E318226D3BA400A2BA68 /* CountryListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE2E317226D3BA400A2BA68 /* CountryListCoordinator.swift */; };
+		EAF8AB3F2274A2070019BA15 /* CityMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF8AB3E2274A2070019BA15 /* CityMapViewModel.swift */; };
+		EAF8AB412274A2B70019BA15 /* CityMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF8AB402274A2B70019BA15 /* CityMapCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +83,11 @@
 		EA91A6D4226A713400F9793C /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		EA91A6D6226A95AB00F9793C /* CountryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListViewModel.swift; sourceTree = "<group>"; };
 		EA91A6DA226AABA700F9793C /* CountrySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountrySection.swift; sourceTree = "<group>"; };
+		EAD057DE227548B40053C936 /* CityMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityMapViewController.swift; sourceTree = "<group>"; };
+		EAD057E0227548C60053C936 /* CityMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CityMapViewController.xib; sourceTree = "<group>"; };
+		EAD057E622754FCF0053C936 /* CityMapSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityMapSection.swift; sourceTree = "<group>"; };
+		EAD057E92275543C0053C936 /* CityInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityInfoCell.swift; sourceTree = "<group>"; };
+		EAD057EC227554710053C936 /* CityInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CityInfoCell.xib; sourceTree = "<group>"; };
 		EAE2E306226B6BE800A2BA68 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		EAE2E308226B704800A2BA68 /* FlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowCoordinator.swift; sourceTree = "<group>"; };
 		EAE2E30E226B771500A2BA68 /* CountryListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryListViewController.xib; sourceTree = "<group>"; };
@@ -83,6 +95,8 @@
 		EAE2E313226D2D4300A2BA68 /* CountryListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryListCell.xib; sourceTree = "<group>"; };
 		EAE2E315226D2D6100A2BA68 /* CountryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListCell.swift; sourceTree = "<group>"; };
 		EAE2E317226D3BA400A2BA68 /* CountryListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListCoordinator.swift; sourceTree = "<group>"; };
+		EAF8AB3E2274A2070019BA15 /* CityMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityMapViewModel.swift; sourceTree = "<group>"; };
+		EAF8AB402274A2B70019BA15 /* CityMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityMapCoordinator.swift; sourceTree = "<group>"; };
 		EC19A440087D83A3899E002D /* Pods-GlovoCodeChallengeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GlovoCodeChallengeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GlovoCodeChallengeTests/Pods-GlovoCodeChallengeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F0E2C3A63C8F2541D1563828 /* Pods_GlovoCodeChallengeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GlovoCodeChallengeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -195,7 +209,7 @@
 		EA91A6CA226A648C00F9793C /* GLovoWorkingAreas */ = {
 			isa = PBXGroup;
 			children = (
-				EAE2E30A226B767200A2BA68 /* CountryCityList */,
+				EAF8AB3C2274A1A80019BA15 /* Flows */,
 				EAE2E305226B6BD700A2BA68 /* Coordinator */,
 				EA91A6D3226A711F00F9793C /* Extensions */,
 				EA91A6D0226A6DAD00F9793C /* Provider */,
@@ -229,12 +243,39 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		EA91A6D9226AAB3C00F9793C /* DataSource */ = {
+		EA91A6D9226AAB3C00F9793C /* Section */ = {
 			isa = PBXGroup;
 			children = (
 				EA91A6DA226AABA700F9793C /* CountrySection.swift */,
 			);
-			path = DataSource;
+			path = Section;
+			sourceTree = "<group>";
+		};
+		EAD057DD2275489D0053C936 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EAD057E8227554240053C936 /* Cells */,
+				EAD057DE227548B40053C936 /* CityMapViewController.swift */,
+				EAD057E0227548C60053C936 /* CityMapViewController.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EAD057E522754FBA0053C936 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				EAD057E622754FCF0053C936 /* CityMapSection.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		EAD057E8227554240053C936 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				EAD057E92275543C0053C936 /* CityInfoCell.swift */,
+				EAD057EC227554710053C936 /* CityInfoCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		EAE2E305226B6BD700A2BA68 /* Coordinator */ = {
@@ -243,6 +284,7 @@
 				EAE2E306226B6BE800A2BA68 /* Coordinator.swift */,
 				EAE2E308226B704800A2BA68 /* FlowCoordinator.swift */,
 				EAE2E317226D3BA400A2BA68 /* CountryListCoordinator.swift */,
+				EAF8AB402274A2B70019BA15 /* CityMapCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -250,7 +292,7 @@
 		EAE2E30A226B767200A2BA68 /* CountryCityList */ = {
 			isa = PBXGroup;
 			children = (
-				EA91A6D9226AAB3C00F9793C /* DataSource */,
+				EA91A6D9226AAB3C00F9793C /* Section */,
 				EAE2E30D226B769500A2BA68 /* ViewModel */,
 				EAE2E30C226B768E00A2BA68 /* View */,
 			);
@@ -282,6 +324,33 @@
 				EAE2E315226D2D6100A2BA68 /* CountryListCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		EAF8AB3B2274A1810019BA15 /* CityMap */ = {
+			isa = PBXGroup;
+			children = (
+				EAD057E522754FBA0053C936 /* Section */,
+				EAD057DD2275489D0053C936 /* View */,
+				EAF8AB3D2274A1ED0019BA15 /* ViewModel */,
+			);
+			path = CityMap;
+			sourceTree = "<group>";
+		};
+		EAF8AB3C2274A1A80019BA15 /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				EAE2E30A226B767200A2BA68 /* CountryCityList */,
+				EAF8AB3B2274A1810019BA15 /* CityMap */,
+			);
+			path = Flows;
+			sourceTree = "<group>";
+		};
+		EAF8AB3D2274A1ED0019BA15 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				EAF8AB3E2274A2070019BA15 /* CityMapViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -393,6 +462,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAD057ED227554710053C936 /* CityInfoCell.xib in Resources */,
+				EAD057E1227548C60053C936 /* CityMapViewController.xib in Resources */,
 				EA91A6A7226A5DC900F9793C /* LaunchScreen.storyboard in Resources */,
 				EAE2E314226D2D4300A2BA68 /* CountryListCell.xib in Resources */,
 				EAE2E30F226B771500A2BA68 /* CountryListViewController.xib in Resources */,
@@ -553,16 +624,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAF8AB412274A2B70019BA15 /* CityMapCoordinator.swift in Sources */,
 				EA91A6D2226A6DC800F9793C /* GlovoProvider.swift in Sources */,
 				EAE2E311226D220700A2BA68 /* CountryListViewController.swift in Sources */,
+				EAD057E722754FCF0053C936 /* CityMapSection.swift in Sources */,
 				EAE2E309226B704800A2BA68 /* FlowCoordinator.swift in Sources */,
 				EA91A69F226A5DC800F9793C /* ViewController.swift in Sources */,
+				EAD057EA2275543C0053C936 /* CityInfoCell.swift in Sources */,
+				EAF8AB3F2274A2070019BA15 /* CityMapViewModel.swift in Sources */,
 				EAE2E307226B6BE800A2BA68 /* Coordinator.swift in Sources */,
 				EAE2E318226D3BA400A2BA68 /* CountryListCoordinator.swift in Sources */,
 				EA91A69D226A5DC800F9793C /* AppDelegate.swift in Sources */,
 				EA91A6CF226A699B00F9793C /* City.swift in Sources */,
 				EA91A6D5226A713400F9793C /* UIViewController+Extensions.swift in Sources */,
 				EAE2E316226D2D6100A2BA68 /* CountryListCell.swift in Sources */,
+				EAD057DF227548B40053C936 /* CityMapViewController.swift in Sources */,
 				EA91A6DB226AABA700F9793C /* CountrySection.swift in Sources */,
 				EA91A6CD226A666100F9793C /* Country.swift in Sources */,
 				EA91A6D7226A95AB00F9793C /* CountryListViewModel.swift in Sources */,
