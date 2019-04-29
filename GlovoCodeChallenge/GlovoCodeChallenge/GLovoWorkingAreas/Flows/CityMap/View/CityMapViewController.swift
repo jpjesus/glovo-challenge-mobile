@@ -29,6 +29,7 @@ class CityMapViewController: UIViewController {
     private var disposeBag = DisposeBag()
     private var city: City?
     private let viewModel: CityMapViewModel
+    private var cities: [City] = []
     private var mapZoom: Float = 13
     private var currentMapZoom: Float = 0
     private var countries: [Country] = []
@@ -89,22 +90,6 @@ extension CityMapViewController {
                  self.countries = countries
                  self.setCities(for: countries)
             }).disposed(by: disposeBag)
-        
-        let dataSource =  createDataSource()
-        
-        viewModel.cityInfo?
-            .map(viewModel.setCityInfo)
-            .drive(cityInfoTableView.rx.items(dataSource: dataSource))
-            .disposed(by: disposeBag)
-        
-        dataSource.titleForHeaderInSection = {
-            dataSource, index in
-            return dataSource.sectionModels[index].header
-        }
-        
-        cityInfoTableView.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
     }
     
     func createDataSource() -> RxTableViewSectionedReloadDataSource<CityMapSection> {
@@ -137,7 +122,18 @@ extension CityMapViewController {
     }
     
     private func displayItemsInMap(for cities: [City]) {
-        
+        self.cities = cities
+        setArrayBounds(for: cities)
+        if let location = self.currentLocation,
+            self.viewModel.isLocationInMapBounds(location, bounds: citiesWithPathBounds) {
+            let camera = GMSCameraPosition.camera(withTarget: location, zoom: 12)
+            mapView.animate(to: camera)
+        } else if let city = self.viewModel.city,
+             !city.code.isEmpty {
+             setTableView()
+        } else {
+            return
+        }
     }
     
     private func displayCityMarkers(for cities: [City]) {
@@ -165,8 +161,34 @@ extension CityMapViewController {
             let polygon = GMSPolygon(path: path)
             polygon.map = self.mapView
         }
-        let cityBounds = viewModel.getCityBounds(for: workingAreaPaths)
-        citiesWithPathBounds[city.code] = cityBounds
+    }
+    
+    private func setArrayBounds(for cities: [City]) {
+        cities.forEach{ [weak self] city in
+            guard let `self` = self else { return }
+            let paths = self.viewModel.getWorkingAreas(city.workingArea)
+            let cityBounds = self.viewModel.getCityBounds(for: paths)
+            citiesWithPathBounds[city.code] = cityBounds
+        }
+        
+    }
+    
+    private func setTableView() {
+        let dataSource =  createDataSource()
+        
+        viewModel.cityInfo?
+            .map(viewModel.setCityInfo)
+            .drive(cityInfoTableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        dataSource.titleForHeaderInSection = {
+            dataSource, index in
+            return dataSource.sectionModels[index].header
+        }
+        
+        cityInfoTableView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
     }
 }
 
