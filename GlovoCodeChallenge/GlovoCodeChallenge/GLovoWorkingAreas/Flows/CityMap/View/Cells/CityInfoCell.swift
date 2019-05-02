@@ -33,7 +33,7 @@ class CityInfoCell: UITableViewCell {
         self.addSubview(infoLabel)
         infoLabel.snp.makeConstraints { make -> Void in
             make.leading.equalToSuperview().inset(leading)
-            make.centerY.equalToSuperview()
+            make.centerY.equalToSuperview().offset(30)
         }
     }
     

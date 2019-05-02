@@ -30,7 +30,7 @@ class CityMapViewController: UIViewController {
     private var city: City?
     private let viewModel: CityMapViewModel
     private var cities: [City] = []
-    private var mapZoom: Float = 13
+    private var mapZoom: Float = 1
     private var currentMapZoom: Float = 0
     private var countries: [Country] = []
     private var citiesCoordinates: [String: CLLocationCoordinate2D] = [:]
@@ -48,7 +48,6 @@ class CityMapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView.delegate = self
         setUI()
         bind()
     }
@@ -63,32 +62,41 @@ extension CityMapViewController {
     
     private func setUI() {
         let cameraPosition = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: mapZoom)
-        mapView = GMSMapView(frame: mapOuterView.frame, camera: cameraPosition)
+        mapView = GMSMapView(frame:.zero, camera: cameraPosition)
         self.mapOuterView.addSubview(mapView)
         
         cityInfoTableView.snp.makeConstraints { make -> Void in
-            make.top.equalToSuperview().inset(0)
+            make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(mapOuterView).inset(0)
+            make.height.equalTo(250)
+            make.bottom.equalTo(mapOuterView.snp.top)
         }
         
         mapOuterView.snp.makeConstraints { make -> Void in
-            make.top.equalTo(cityInfoTableView).inset(0)
+            make.top.equalTo(cityInfoTableView.snp.bottom).inset(0)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
         
         mapView.snp.makeConstraints { make -> Void in
-            make.bottom.leading.trailing.top.equalToSuperview()
+            make.bottom.leading.trailing.top.equalTo(mapOuterView)
         }
+        mapView.delegate = self
     }
     
     private func bind() {
+        setTableView()
         viewModel.countries?.asObservable()
             .subscribe(onNext: { [weak self ] countries in
                  guard let `self` = self else { return }
                  self.countries = countries
                  self.setCities(for: countries)
+            }).disposed(by: disposeBag)
+        
+        viewModel.cityInfo?.asObservable()
+            .subscribe(onNext: { [weak self ] city in
+                guard let `self` = self else { return }
+                self.displayWorkingAreas(for: city)
             }).disposed(by: disposeBag)
     }
     

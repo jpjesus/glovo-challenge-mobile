@@ -39,6 +39,8 @@ class FlowCoordinator: Coordinator {
     func showMapView(with city: City? = nil, from: Coordinator) {
 
         let coordinator = CityMapCoordinator(parent, mainCoordinator: self, city: city)
+        addCoordinatorChild(coordinator)
+        coordinator.start()
         
     }
 }

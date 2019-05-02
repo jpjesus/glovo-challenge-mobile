@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class CityMapCoordinator: Coordinator {
     
@@ -15,17 +16,19 @@ class CityMapCoordinator: Coordinator {
     private weak var mainCoordinator: Coordinator?
     private weak var navigation: UINavigationController?
     private var city: City?
+    private let coordinates: CLLocationCoordinate2D?
     
-    init(_ navigation: UINavigationController?, mainCoordinator: Coordinator, city: City?) {
+    init(_ navigation: UINavigationController?, mainCoordinator: Coordinator, city: City?, coordinates: CLLocationCoordinate2D? = nil) {
         self.navigation = navigation
         self.mainCoordinator = mainCoordinator
         self.city = city
+        self.coordinates = coordinates
     }
     
     func start() {
-//        let viewModel = CountryListViewModel(self)
-//        let vc = CountryListViewController(viewModel)
-//        navigation?.pushViewController(vc, animated: true)
+        let viewModel = CityMapViewModel(self, city: self.city, currentLocation: coordinates)
+        let vc = CityMapViewController(viewModel, currentLocation: coordinates)
+        navigation?.pushViewController(vc, animated: true)
     }
     
     func finish() {}

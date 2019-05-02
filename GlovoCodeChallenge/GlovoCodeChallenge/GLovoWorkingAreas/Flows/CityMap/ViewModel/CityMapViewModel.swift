@@ -22,7 +22,7 @@ class CityMapViewModel {
     var city: City?
     private weak var coordinator: CityMapCoordinator?
     
-    init(_ coordinator: CityMapCoordinator, city: City, currentLocation: CLLocationCoordinate2D?) {
+    init(_ coordinator: CityMapCoordinator, city: City?, currentLocation: CLLocationCoordinate2D?) {
         self.coordinator = coordinator
         if let _ = currentLocation {
             countries = setCountryWithCities().asDriver(onErrorJustReturn: [])
