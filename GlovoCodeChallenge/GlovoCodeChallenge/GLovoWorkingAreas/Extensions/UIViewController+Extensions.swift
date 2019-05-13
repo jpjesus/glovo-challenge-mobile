@@ -41,6 +41,11 @@ extension UIViewController {
         
         UIApplication.shared.open(url, options: options, completionHandler: complete)
     }
+    
+    func showAlert(with title: String) -> UIAlertController  {
+        let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: NSLocalizedString(title, comment: ""), preferredStyle: .alert)
+        return alertController
+    }
 }
 
 

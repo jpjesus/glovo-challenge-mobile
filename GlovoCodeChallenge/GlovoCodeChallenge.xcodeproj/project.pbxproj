@@ -15,6 +15,7 @@
 		EA5CBA78228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA77228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift */; };
 		EA5CBA7A228920EC006A8E4D /* MainSelectionOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA79228920EC006A8E4D /* MainSelectionOptionsViewController.swift */; };
 		EA5CBA7C228928EB006A8E4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA7B228928EB006A8E4D /* LocationManager.swift */; };
+		EA5CBA80228938D2006A8E4D /* MockLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = EA5CBA7F228938D2006A8E4D /* MockLocation.gpx */; };
 		EA91A69D226A5DC800F9793C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA91A69C226A5DC800F9793C /* AppDelegate.swift */; };
 		EA91A69F226A5DC800F9793C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA91A69E226A5DC800F9793C /* ViewController.swift */; };
 		EA91A6A2226A5DC800F9793C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA91A6A0226A5DC800F9793C /* Main.storyboard */; };
@@ -76,6 +77,7 @@
 		EA5CBA77228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSelectionOptionsCoordinator.swift; sourceTree = "<group>"; };
 		EA5CBA79228920EC006A8E4D /* MainSelectionOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainSelectionOptionsViewController.swift; sourceTree = "<group>"; };
 		EA5CBA7B228928EB006A8E4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		EA5CBA7F228938D2006A8E4D /* MockLocation.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MockLocation.gpx; sourceTree = "<group>"; };
 		EA91A699226A5DC800F9793C /* GlovoCodeChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlovoCodeChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA91A69C226A5DC800F9793C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA91A69E226A5DC800F9793C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -167,9 +169,8 @@
 		EA5CBA6F22890D66006A8E4D /* MainSelectionOptionsView */ = {
 			isa = PBXGroup;
 			children = (
-				EA5CBA79228920EC006A8E4D /* MainSelectionOptionsViewController.swift */,
+				EA5CBA7D22893137006A8E4D /* View */,
 				EA5CBA742289150F006A8E4D /* ViewModel */,
-				EA5CBA7222890F25006A8E4D /* MainSelectionOptionsViewController.xib */,
 			);
 			path = MainSelectionOptionsView;
 			sourceTree = "<group>";
@@ -180,6 +181,23 @@
 				EA5CBA7522891521006A8E4D /* MainSelectionOptionsViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		EA5CBA7D22893137006A8E4D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EA5CBA79228920EC006A8E4D /* MainSelectionOptionsViewController.swift */,
+				EA5CBA7222890F25006A8E4D /* MainSelectionOptionsViewController.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EA5CBA7E228938C8006A8E4D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EA5CBA7F228938D2006A8E4D /* MockLocation.gpx */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		EA91A690226A5DC800F9793C = {
@@ -239,6 +257,7 @@
 		EA91A6CA226A648C00F9793C /* GLovoWorkingAreas */ = {
 			isa = PBXGroup;
 			children = (
+				EA5CBA7E228938C8006A8E4D /* Resources */,
 				EAF8AB3C2274A1A80019BA15 /* Flows */,
 				EAE2E305226B6BD700A2BA68 /* Coordinator */,
 				EA91A6D3226A711F00F9793C /* Extensions */,
@@ -500,6 +519,7 @@
 				EAD057E1227548C60053C936 /* CityMapViewController.xib in Resources */,
 				EA91A6A7226A5DC900F9793C /* LaunchScreen.storyboard in Resources */,
 				EAE2E314226D2D4300A2BA68 /* CountryListCell.xib in Resources */,
+				EA5CBA80228938D2006A8E4D /* MockLocation.gpx in Resources */,
 				EAE2E30F226B771500A2BA68 /* CountryListViewController.xib in Resources */,
 				EA91A6A4226A5DC900F9793C /* Assets.xcassets in Resources */,
 				EA91A6A2226A5DC800F9793C /* Main.storyboard in Resources */,
@@ -543,6 +563,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftSpinner/SwiftSpinner.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -558,6 +579,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSpinner.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

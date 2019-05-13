@@ -20,6 +20,7 @@ class CityMapViewModel {
     var cityInfo: Driver<City>?
     var countries: Driver<[Country]>?
     var city: City?
+    var currentLocationSubject: PublishSubject<City>? = PublishSubject<City>()
     private weak var coordinator: CityMapCoordinator?
     
     init(_ coordinator: CityMapCoordinator, city: City?, currentLocation: CLLocationCoordinate2D?) {
@@ -70,10 +71,10 @@ class CityMapViewModel {
         }
     }
     
-    func cleanCoordinator() {
+    func showCountryList() {
         coordinator?.finish()
+        coordinator?.showCountryList()
     }
-    
 }
 
 // MARK: Funcionts for city case
@@ -106,6 +107,10 @@ extension CityMapViewModel {
     
     func isLocationInMapBounds(_ currentLocation: CLLocationCoordinate2D, bounds: [String: GMSCoordinateBounds]) -> Bool {
         return bounds.contains{ $0.value.contains(currentLocation)}
+    }
+    
+    func retreiveCityCode(_ currentLocation: CLLocationCoordinate2D, bounds: [String: GMSCoordinateBounds]) -> String {
+        return bounds.first(where: { $0.value.contains(currentLocation)})?.key ?? ""
     }
     
     

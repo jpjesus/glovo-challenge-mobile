@@ -13,6 +13,7 @@ import CoreLocation
 import SnapKit
 import RxDataSources
 import GoogleMaps
+import SwiftSpinner
 
 class CityMapViewController: UIViewController {
     
@@ -20,6 +21,7 @@ class CityMapViewController: UIViewController {
         didSet {
             cityInfoTableView.register(CityInfoCell.self, forCellReuseIdentifier: CityInfoCell.identifier)
             cityInfoTableView.separatorStyle = .none
+            cityInfoTableView.bounces = false
         }
     }
     
@@ -63,6 +65,7 @@ class CityMapViewController: UIViewController {
         mapView.delegate = nil
         mapView.removeFromSuperview()
         mapView = nil
+        cityInfoTableView.dataSource = nil
     }
     
     deinit {
@@ -100,17 +103,19 @@ extension CityMapViewController {
         setTableView()
         viewModel.countries?.asObservable()
             .subscribe(onNext: { [weak self ] countries in
+                SwiftSpinner.show(duration: 0.5, title: "Searching for working areas ...")
                 guard let `self` = self else { return }
-                self.countries = countries
                 self.setCities(for: countries)
             }).disposed(by: disposeBag)
         
         viewModel.cityInfo?.asObservable()
             .subscribe(onNext: { [weak self ] city in
+                 SwiftSpinner.show(duration: 0.5, title: "Searching for working areas ...")
                 guard let `self` = self else { return }
-                self.city = city
+                self.cities.append(city)
                 self.displayWorkingAreas(for: city)
-                self.displayItemsInMap(for: [city])
+                self.setBoundForCities(for: [city])
+                self.displayLocationInMap()
             }).disposed(by: disposeBag)
     }
     
@@ -138,25 +143,35 @@ extension CityMapViewController {
     private func setCities(for countries: [Country]) {
         countries.forEach{ [weak self] country in
             guard let `self` = self else { return }
-            self.cities = country.cities
-            self.displayCityMarkers(for: country.cities)
+            self.countries.append(country)
             self.setWorkingAreas(for: country.cities)
-            self.displayItemsInMap(for: country.cities)
+            self.displayCityMarkers(for: country.cities)
+            self.setBoundForCities(for: country.cities)
         }
+        displayLocationInMap()
     }
     
-    private func displayItemsInMap(for cities: [City]) {
-        self.cities = cities
+    private func setBoundForCities(for cities: [City]) {
         setArrayBounds(for: cities)
+    }
+    
+    private func displayLocationInMap() {
         if let location = self.currentLocation,
             self.viewModel.isLocationInMapBounds(location, bounds: citiesWithPathBounds) {
             let camera = GMSCameraPosition.camera(withTarget: location, zoom: 12)
+            let code = self.viewModel.retreiveCityCode(location, bounds: citiesWithPathBounds)
+            let city = cities.first(where:{$0.code ==  code})
+            viewModel.cityInfo =  Single.just(city ?? City()).asDriver(onErrorJustReturn: City())
             mapView.animate(to: camera)
         } else if let city = self.viewModel.city,
             !city.code.isEmpty {
-            centerOnCity(with: city.code)
+            SwiftSpinner.hide {
+                self.centerOnCity(with: city.code)
+            }
         } else {
-            return
+            SwiftSpinner.hide {
+                self.showAlertError(with: self.showAlert(with: "Not working areas available for given location. Please select another location from our country list."))
+            }
         }
     }
     
@@ -164,6 +179,7 @@ extension CityMapViewController {
         mapView.clear()
         cities.forEach { [weak self] city in
             guard let `self` = self else { return }
+            self.cities.append(city)
             let marker = self.viewModel.getCityMarker(city)
             self.citiesCoordinates[city.code] = marker.position
             marker.map = self.mapView
@@ -171,7 +187,6 @@ extension CityMapViewController {
     }
     
     private func setWorkingAreas(for cities: [City]) {
-        mapView.clear()
         cities.forEach { [weak self] city in
             guard let `self` = self else { return }
             self.displayWorkingAreas(for: city)
@@ -179,7 +194,6 @@ extension CityMapViewController {
     }
     
     private func displayWorkingAreas(for city: City) {
-        mapView.clear()
         let workingAreaPaths = viewModel.getWorkingAreas(city.workingArea)
         workingAreaPaths.forEach{ [weak self] path in
             guard let `self` = self else { return }
@@ -195,17 +209,24 @@ extension CityMapViewController {
             let cityBounds = self.viewModel.getCityBounds(for: paths)
             citiesWithPathBounds[city.code] = cityBounds
         }
-        
+
+    }
+    
+    private func displaAllyWorkingAreas() {
+        mapView.clear()
+        cities.forEach { [weak self] city in
+            self?.displayWorkingAreas(for: city)
+        }
     }
     
     private func setTableView() {
         let dataSource =  createDataSource()
         
-        viewModel.cityInfo?
+        viewModel.cityInfo?.asObservable()
             .map(viewModel.setCityInfo)
-            .drive(cityInfoTableView.rx.items(dataSource: dataSource))
+            .bind(to: cityInfoTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-        
+  
         dataSource.titleForHeaderInSection = {
             dataSource, index in
             return dataSource.sectionModels[index].header
@@ -218,7 +239,7 @@ extension CityMapViewController {
     
     private func displayWorkingAreasOrCities() {
         if currentMapZoom > mapZoom {
-            displayWorkingAreas(for: city ?? City())
+            displaAllyWorkingAreas()
         } else {
             displayCityMarkers(for: cities)
         }
@@ -229,6 +250,20 @@ extension CityMapViewController {
         let position = viewModel.getCoordinatesForCity(city)
         let camera = GMSCameraUpdate.setTarget(position, zoom: 12)
         mapView.animate(with: camera)
+    }
+    
+    private func showAlertError(with alertView: UIAlertController) {
+        let action = UIAlertAction(title: "Show country list", style: UIAlertAction.Style.default) { action in
+            self.viewModel.showCountryList()
+        }
+        alertView.addAction(action)
+        if let navigation = self.navigationController?.visibleViewController {
+            if !(navigation.isKind(of: UIAlertController.self)) {
+                OperationQueue.main.addOperation {
+                    self.navigationController?.present(alertView, animated: true, completion: nil)
+                }
+            }
+        }
     }
 }
 

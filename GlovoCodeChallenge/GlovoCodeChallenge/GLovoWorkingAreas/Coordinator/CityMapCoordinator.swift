@@ -32,6 +32,10 @@ class CityMapCoordinator: Coordinator {
     }
     
     func finish() {
-        mainCoordinator?.removeChildCoordinator(self)
+        navigation?.popViewController(animated: true)
+    }
+    
+    func showCountryList() {
+        mainCoordinator?.showCountryListView()
     }
 }

@@ -41,6 +41,7 @@ class CountryListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationItem.title = "Country list"
         navigationController?.navigationItem.hidesBackButton = false
     }
 }
