@@ -27,6 +27,6 @@ class CountryListCoordinator: Coordinator {
     }
 
     func gotoMapView(with city: City) {
-        mainCoordinator?.showMapView(with: city, from: self)
+        mainCoordinator?.showMapView(with: city)
     }
 }

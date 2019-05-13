@@ -70,6 +70,10 @@ class CityMapViewModel {
         }
     }
     
+    func cleanCoordinator() {
+        coordinator?.finish()
+    }
+    
 }
 
 // MARK: Funcionts for city case

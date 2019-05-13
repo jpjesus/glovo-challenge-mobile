@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		22E7C4D9D8815D460AF8B107 /* Pods_GlovoCodeChallengeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E2C3A63C8F2541D1563828 /* Pods_GlovoCodeChallengeUITests.framework */; };
 		C55FAC9A8B00966171D671CD /* Pods_GlovoCodeChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35C0E617EC2077E12652D3AE /* Pods_GlovoCodeChallenge.framework */; };
+		EA5CBA6E2288E2FE006A8E4D /* CLLocation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA6D2288E2FE006A8E4D /* CLLocation+Extensions.swift */; };
+		EA5CBA7322890F25006A8E4D /* MainSelectionOptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA5CBA7222890F25006A8E4D /* MainSelectionOptionsViewController.xib */; };
+		EA5CBA7622891521006A8E4D /* MainSelectionOptionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA7522891521006A8E4D /* MainSelectionOptionsViewModel.swift */; };
+		EA5CBA78228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA77228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift */; };
+		EA5CBA7A228920EC006A8E4D /* MainSelectionOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA79228920EC006A8E4D /* MainSelectionOptionsViewController.swift */; };
+		EA5CBA7C228928EB006A8E4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5CBA7B228928EB006A8E4D /* LocationManager.swift */; };
 		EA91A69D226A5DC800F9793C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA91A69C226A5DC800F9793C /* AppDelegate.swift */; };
 		EA91A69F226A5DC800F9793C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA91A69E226A5DC800F9793C /* ViewController.swift */; };
 		EA91A6A2226A5DC800F9793C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA91A6A0226A5DC800F9793C /* Main.storyboard */; };
@@ -64,6 +70,12 @@
 		58A46A1FCB70BC7332F6BFA3 /* Pods-GlovoCodeChallengeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GlovoCodeChallengeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GlovoCodeChallengeUITests/Pods-GlovoCodeChallengeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		AF6CD424AD55842BB8ACEB8C /* Pods-GlovoCodeChallenge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GlovoCodeChallenge.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GlovoCodeChallenge/Pods-GlovoCodeChallenge.debug.xcconfig"; sourceTree = "<group>"; };
 		E195E854B5A41AA90424BDF9 /* Pods_GlovoCodeChallengeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GlovoCodeChallengeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA5CBA6D2288E2FE006A8E4D /* CLLocation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extensions.swift"; sourceTree = "<group>"; };
+		EA5CBA7222890F25006A8E4D /* MainSelectionOptionsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainSelectionOptionsViewController.xib; sourceTree = "<group>"; };
+		EA5CBA7522891521006A8E4D /* MainSelectionOptionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSelectionOptionsViewModel.swift; sourceTree = "<group>"; };
+		EA5CBA77228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSelectionOptionsCoordinator.swift; sourceTree = "<group>"; };
+		EA5CBA79228920EC006A8E4D /* MainSelectionOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainSelectionOptionsViewController.swift; sourceTree = "<group>"; };
+		EA5CBA7B228928EB006A8E4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		EA91A699226A5DC800F9793C /* GlovoCodeChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlovoCodeChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA91A69C226A5DC800F9793C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA91A69E226A5DC800F9793C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -152,6 +164,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EA5CBA6F22890D66006A8E4D /* MainSelectionOptionsView */ = {
+			isa = PBXGroup;
+			children = (
+				EA5CBA79228920EC006A8E4D /* MainSelectionOptionsViewController.swift */,
+				EA5CBA742289150F006A8E4D /* ViewModel */,
+				EA5CBA7222890F25006A8E4D /* MainSelectionOptionsViewController.xib */,
+			);
+			path = MainSelectionOptionsView;
+			sourceTree = "<group>";
+		};
+		EA5CBA742289150F006A8E4D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				EA5CBA7522891521006A8E4D /* MainSelectionOptionsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		EA91A690226A5DC800F9793C = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +253,7 @@
 			children = (
 				EA91A6CC226A666100F9793C /* Country.swift */,
 				EA91A6CE226A699B00F9793C /* City.swift */,
+				EA5CBA7B228928EB006A8E4D /* LocationManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -239,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				EA91A6D4226A713400F9793C /* UIViewController+Extensions.swift */,
+				EA5CBA6D2288E2FE006A8E4D /* CLLocation+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -285,6 +317,7 @@
 				EAE2E308226B704800A2BA68 /* FlowCoordinator.swift */,
 				EAE2E317226D3BA400A2BA68 /* CountryListCoordinator.swift */,
 				EAF8AB402274A2B70019BA15 /* CityMapCoordinator.swift */,
+				EA5CBA77228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -339,6 +372,7 @@
 		EAF8AB3C2274A1A80019BA15 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				EA5CBA6F22890D66006A8E4D /* MainSelectionOptionsView */,
 				EAE2E30A226B767200A2BA68 /* CountryCityList */,
 				EAF8AB3B2274A1810019BA15 /* CityMap */,
 			);
@@ -469,6 +503,7 @@
 				EAE2E30F226B771500A2BA68 /* CountryListViewController.xib in Resources */,
 				EA91A6A4226A5DC900F9793C /* Assets.xcassets in Resources */,
 				EA91A6A2226A5DC800F9793C /* Main.storyboard in Resources */,
+				EA5CBA7322890F25006A8E4D /* MainSelectionOptionsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +539,7 @@
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCoreLocation/RxCoreLocation.framework",
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
@@ -518,6 +554,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCoreLocation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
@@ -631,14 +668,19 @@
 				EAE2E309226B704800A2BA68 /* FlowCoordinator.swift in Sources */,
 				EA91A69F226A5DC800F9793C /* ViewController.swift in Sources */,
 				EAD057EA2275543C0053C936 /* CityInfoCell.swift in Sources */,
+				EA5CBA7C228928EB006A8E4D /* LocationManager.swift in Sources */,
+				EA5CBA78228917D2006A8E4D /* MainSelectionOptionsCoordinator.swift in Sources */,
 				EAF8AB3F2274A2070019BA15 /* CityMapViewModel.swift in Sources */,
 				EAE2E307226B6BE800A2BA68 /* Coordinator.swift in Sources */,
 				EAE2E318226D3BA400A2BA68 /* CountryListCoordinator.swift in Sources */,
 				EA91A69D226A5DC800F9793C /* AppDelegate.swift in Sources */,
 				EA91A6CF226A699B00F9793C /* City.swift in Sources */,
 				EA91A6D5226A713400F9793C /* UIViewController+Extensions.swift in Sources */,
+				EA5CBA7622891521006A8E4D /* MainSelectionOptionsViewModel.swift in Sources */,
+				EA5CBA7A228920EC006A8E4D /* MainSelectionOptionsViewController.swift in Sources */,
 				EAE2E316226D2D6100A2BA68 /* CountryListCell.swift in Sources */,
 				EAD057DF227548B40053C936 /* CityMapViewController.swift in Sources */,
+				EA5CBA6E2288E2FE006A8E4D /* CLLocation+Extensions.swift in Sources */,
 				EA91A6DB226AABA700F9793C /* CountrySection.swift in Sources */,
 				EA91A6CD226A666100F9793C /* Country.swift in Sources */,
 				EA91A6D7226A95AB00F9793C /* CountryListViewModel.swift in Sources */,

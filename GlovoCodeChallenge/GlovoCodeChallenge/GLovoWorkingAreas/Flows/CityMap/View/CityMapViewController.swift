@@ -30,11 +30,11 @@ class CityMapViewController: UIViewController {
     private var city: City?
     private let viewModel: CityMapViewModel
     private var cities: [City] = []
-    private var mapZoom: Float = 1
+    private var mapZoom: Float = 8
     private var currentMapZoom: Float = 0
     private var countries: [Country] = []
     private var citiesCoordinates: [String: CLLocationCoordinate2D] = [:]
-    private var citiesWithPathBounds:[String: GMSCoordinateBounds] = [:]
+    private var citiesWithPathBounds: [String: GMSCoordinateBounds] = [:]
     
     init(_ viewModel: CityMapViewModel, currentLocation: CLLocationCoordinate2D?) {
         self.viewModel = viewModel
@@ -46,14 +46,26 @@ class CityMapViewController: UIViewController {
         return nil
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+         navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationItem.title = "Map information"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
         bind()
     }
     
-    deinit {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         mapView.clear()
+        mapView.delegate = nil
+        mapView.removeFromSuperview()
+        mapView = nil
+    }
+    
+    deinit {
         disposeBag = DisposeBag()
     }
 }
@@ -88,15 +100,17 @@ extension CityMapViewController {
         setTableView()
         viewModel.countries?.asObservable()
             .subscribe(onNext: { [weak self ] countries in
-                 guard let `self` = self else { return }
-                 self.countries = countries
-                 self.setCities(for: countries)
+                guard let `self` = self else { return }
+                self.countries = countries
+                self.setCities(for: countries)
             }).disposed(by: disposeBag)
         
         viewModel.cityInfo?.asObservable()
             .subscribe(onNext: { [weak self ] city in
                 guard let `self` = self else { return }
+                self.city = city
                 self.displayWorkingAreas(for: city)
+                self.displayItemsInMap(for: [city])
             }).disposed(by: disposeBag)
     }
     
@@ -114,18 +128,20 @@ extension CityMapViewController {
 
 extension CityMapViewController {
     
-    func centerMapOnCity(on coordinates: CLLocationCoordinate2D? = nil) {
-        guard let currentCity = viewModel.city else { return }
-        let coordinates = viewModel.getCoordinatesForCity(currentCity)
-        let camera = GMSCameraUpdate.setTarget(coordinates, zoom: mapZoom)
+    func centerMapOnCity(on marker: GMSMarker) {
+        guard let code = citiesCoordinates.first(where: { $0.value == marker.position })?.key else { return }
+        guard let bounds = citiesWithPathBounds[code] else { return }
+        let camera = GMSCameraUpdate.fit(bounds)
         mapView.animate(with: camera)
     }
     
     private func setCities(for countries: [Country]) {
         countries.forEach{ [weak self] country in
             guard let `self` = self else { return }
+            self.cities = country.cities
             self.displayCityMarkers(for: country.cities)
             self.setWorkingAreas(for: country.cities)
+            self.displayItemsInMap(for: country.cities)
         }
     }
     
@@ -137,8 +153,8 @@ extension CityMapViewController {
             let camera = GMSCameraPosition.camera(withTarget: location, zoom: 12)
             mapView.animate(to: camera)
         } else if let city = self.viewModel.city,
-             !city.code.isEmpty {
-             setTableView()
+            !city.code.isEmpty {
+            centerOnCity(with: city.code)
         } else {
             return
         }
@@ -163,6 +179,7 @@ extension CityMapViewController {
     }
     
     private func displayWorkingAreas(for city: City) {
+        mapView.clear()
         let workingAreaPaths = viewModel.getWorkingAreas(city.workingArea)
         workingAreaPaths.forEach{ [weak self] path in
             guard let `self` = self else { return }
@@ -198,6 +215,21 @@ extension CityMapViewController {
             .setDelegate(self)
             .disposed(by: disposeBag)
     }
+    
+    private func displayWorkingAreasOrCities() {
+        if currentMapZoom > mapZoom {
+            displayWorkingAreas(for: city ?? City())
+        } else {
+            displayCityMarkers(for: cities)
+        }
+    }
+    
+    private func centerOnCity(with code: String) {
+        guard let city = cities.first(where: { $0.code == code }) else { return }
+        let position = viewModel.getCoordinatesForCity(city)
+        let camera = GMSCameraUpdate.setTarget(position, zoom: 12)
+        mapView.animate(with: camera)
+    }
 }
 
 extension CityMapViewController: UICollectionViewDelegateFlowLayout {
@@ -219,10 +251,11 @@ extension CityMapViewController: UICollectionViewDelegateFlowLayout {
 extension CityMapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         currentMapZoom = position.zoom
+        displayWorkingAreasOrCities()
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        //centerMap(on: marker)
+        centerMapOnCity(on: marker)
         return true
     }
 }

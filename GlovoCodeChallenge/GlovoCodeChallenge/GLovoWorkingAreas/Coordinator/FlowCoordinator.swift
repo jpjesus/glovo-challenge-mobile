@@ -23,21 +23,29 @@ class FlowCoordinator: Coordinator {
     }
     
     func start() {
-        if CLLocationManager.authorizationStatus() != .denied {
-            showCountryListView()
-        } else {
-            showCountryListView()
-        }
+        showMainView()
     }
     
-    private func showCountryListView() {
+    private func showMainView() {
+        let coordinator = MainSelectionOptionsCoordinator(parent, mainCoordinator: self)
+        addCoordinatorChild(coordinator)
+        coordinator.start()
+    }
+    
+    func showCountryListView() {
         let coordinator = CountryListCoordinator(parent, mainCoordinator: self)
         addCoordinatorChild(coordinator)
         coordinator.start()
     }
-
-    func showMapView(with city: City? = nil, from: Coordinator) {
-
+    
+    func showMapView(with coordinates: CLLocationCoordinate2D?) {
+        let coordinator = CityMapCoordinator(parent, mainCoordinator: self, coordinates: coordinates)
+        addCoordinatorChild(coordinator)
+        coordinator.start()
+    }
+    
+    func showMapView(with city: City? = nil) {
+        
         let coordinator = CityMapCoordinator(parent, mainCoordinator: self, city: city)
         addCoordinatorChild(coordinator)
         coordinator.start()

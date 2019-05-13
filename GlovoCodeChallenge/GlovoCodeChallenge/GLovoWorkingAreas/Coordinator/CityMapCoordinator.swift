@@ -13,12 +13,12 @@ class CityMapCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
     
-    private weak var mainCoordinator: Coordinator?
+    private weak var mainCoordinator: FlowCoordinator?
     private weak var navigation: UINavigationController?
     private var city: City?
     private let coordinates: CLLocationCoordinate2D?
     
-    init(_ navigation: UINavigationController?, mainCoordinator: Coordinator, city: City?, coordinates: CLLocationCoordinate2D? = nil) {
+    init(_ navigation: UINavigationController?, mainCoordinator: FlowCoordinator, city: City? = nil, coordinates: CLLocationCoordinate2D? = nil) {
         self.navigation = navigation
         self.mainCoordinator = mainCoordinator
         self.city = city
@@ -31,5 +31,7 @@ class CityMapCoordinator: Coordinator {
         navigation?.pushViewController(vc, animated: true)
     }
     
-    func finish() {}
+    func finish() {
+        mainCoordinator?.removeChildCoordinator(self)
+    }
 }
