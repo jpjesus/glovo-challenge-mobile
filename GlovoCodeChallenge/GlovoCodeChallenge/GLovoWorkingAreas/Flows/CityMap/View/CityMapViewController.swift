@@ -100,7 +100,7 @@ extension CityMapViewController {
     }
     
     private func bind() {
-        setTableView()
+        
         viewModel.countries?.asObservable()
             .subscribe(onNext: { [weak self ] countries in
                 SwiftSpinner.show(duration: 0.5, title: "Searching for working areas ...")
@@ -110,13 +110,15 @@ extension CityMapViewController {
         
         viewModel.cityInfo?.asObservable()
             .subscribe(onNext: { [weak self ] city in
-                 SwiftSpinner.show(duration: 0.5, title: "Searching for working areas ...")
+                SwiftSpinner.show(duration: 0.5, title: "Searching for working areas ...")
                 guard let `self` = self else { return }
                 self.cities.append(city)
                 self.displayWorkingAreas(for: city)
                 self.setBoundForCities(for: [city])
                 self.displayLocationInMap()
             }).disposed(by: disposeBag)
+        
+        setTableView()
     }
     
     func createDataSource() -> RxTableViewSectionedReloadDataSource<CityMapSection> {
@@ -161,7 +163,11 @@ extension CityMapViewController {
             let camera = GMSCameraPosition.camera(withTarget: location, zoom: 12)
             let code = self.viewModel.retreiveCityCode(location, bounds: citiesWithPathBounds)
             let city = cities.first(where:{$0.code ==  code})
-            viewModel.cityInfo =  Single.just(city ?? City()).asDriver(onErrorJustReturn: City())
+            viewModel.cityInfo = Driver<City>.just(city ?? City())
+            viewModel.cityInfo?
+                     .map(viewModel.setCityInfo)
+                     .drive(cityInfoTableView.rx.items(dataSource: createDataSource()))
+                     .disposed(by: disposeBag)
             mapView.animate(to: camera)
         } else if let city = self.viewModel.city,
             !city.code.isEmpty {
@@ -220,13 +226,15 @@ extension CityMapViewController {
     }
     
     private func setTableView() {
+        
         let dataSource =  createDataSource()
         
-        viewModel.cityInfo?.asObservable()
+        viewModel.cityInfo?
             .map(viewModel.setCityInfo)
-            .bind(to: cityInfoTableView.rx.items(dataSource: dataSource))
+            .drive(cityInfoTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-  
+        
+        
         dataSource.titleForHeaderInSection = {
             dataSource, index in
             return dataSource.sectionModels[index].header
